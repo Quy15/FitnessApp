@@ -1,6 +1,7 @@
 
 
 import 'package:dev/layout/continue.dart';
+import 'package:dev/layout/exam.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/login.dart';
 import 'package:dev/layout/register.dart';
@@ -28,11 +29,12 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
     debugShowCheckedModeBanner: false,
     title: 'HealthApp',
-    initialRoute: 'login',
+    initialRoute: 'exam',
       routes: { 'login': (context) => Login(),
                 'register': (context) => Register(),
                 'home': (context) => Home(),
-                'continue': (context) => Continue()
+                'continue': (context) => Continue(),
+                'exam': (context) => Exam()
       },
     home: isLoggedIn ? Home() : Login(),
   );

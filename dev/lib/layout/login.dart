@@ -1,6 +1,8 @@
 import 'package:dev/auth.dart';
+import 'package:dev/layout/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -10,16 +12,22 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login> {
-  String? errorMessage = '';
-  bool isLogin = true;
+  String? errorMessage;
   bool hidePass = true;
 
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _pass = TextEditingController();
+  final _email = TextEditingController();
+  final _pass = TextEditingController();
+
+  @override
+  void dispose(){
+    _email.dispose();
+    _pass.dispose();
+    super.dispose();
+  }
 
   Future<void> signInWithEmailAndPassWord() async {
     try{
-      await Auth().signInWithEmailAndPassWord(email: _email.text, password: _pass.text);
+      await Auth().signInWithEmailAndPassWord(email: _email.text.trim(), password: _pass.text.trim());
     }on FirebaseAuthException catch (e){
       setState(() {
         errorMessage = e.message;
@@ -41,7 +49,7 @@ class LoginState extends State<Login> {
           body: Stack(
             children: [
               Container(
-                padding: EdgeInsets.only(left: 35, top: 135, right: 35),
+                padding: EdgeInsets.only(left: 50, top: 135, right: 35),
                 child: Text(
                   'Đăng nhập hệ thống',
                   style: TextStyle(color: Colors.black, fontSize: 33),
@@ -112,7 +120,20 @@ class LoginState extends State<Login> {
                             child: IconButton(
                               color: Colors.white,
                               onPressed: () {
-                                Navigator.pushNamed(context, 'home');
+                                signInWithEmailAndPassWord();
+                                Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Home()));
+                                  Fluttertoast.showToast(
+                                    msg: 'Đăng nhập thành công',
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 2,
+                                    textColor: Colors.white,
+                                    backgroundColor: const Color.fromARGB(255, 80, 182, 133),
+                                    fontSize: 20,
+                                  );
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),

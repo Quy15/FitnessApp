@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1018142705211",
-    "project_id": "healthapp-850a8",
-    "storage_bucket": "healthapp-850a8.appspot.com"
+    "project_number": "230661978645",
+    "project_id": "healthapp-5af04",
+    "storage_bucket": "healthapp-5af04.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1018142705211:android:38f24c81949a9c3514be1e",
+        "mobilesdk_app_id": "1:230661978645:android:30ef78b21e1a2b4181ec1c",
         "android_client_info": {
           "package_name": "com.example.dev"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAW6a9KCCHlfV9FMi__7YD0CugzBCmPfqg"
+          "current_key": "AIzaSyCc89B0c4eU53GsrjQDP3cJW1Zp0fpJ6zg"
         }
       ],
       "services": {
