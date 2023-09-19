@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/auth.dart';
 import 'package:dev/layout/home.dart';
+import 'package:dev/layout/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,21 +17,48 @@ class Register extends StatefulWidget {
 }
 
 class RegisterState extends State<Register> {
-  String? errorMessage = '';
-  TextEditingController _emailText = TextEditingController();
-  TextEditingController _passWord = TextEditingController();
+  final _emailText = TextEditingController();
+  final _passWord = TextEditingController();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _confirm = TextEditingController();
 
-  Widget _errorMessage() {
-    return Text(errorMessage == '' ? '' : 'Hum ? $errorMessage');
+  @override
+  void dispose(){
+    _emailText.dispose();
+    _passWord.dispose();
+    _name.dispose();
+    _phone.dispose();
+    _confirm.dispose();
+    super.dispose();
   }
 
-  Future<void> createUserWithEmailAndPassWord() async {
-    try{
-      await Auth().createUserWithEmailAndPassWord(email: _emailText.text, password: _passWord.text);
-    }on FirebaseAuthException catch (e){
-      setState(() {
-        errorMessage = e.message;
-      });
+  final DatabaseReference _dbref = FirebaseDatabase.instance.ref('users');
+  
+
+  Future signUp () async {
+    if (checkPass()){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailText.text.trim(), password: _passWord.text.trim()
+      );
+
+      addUser(_name.text.trim(), _phone.text.trim(), _emailText.text.trim());
+    }
+  }
+
+  Future addUser(String name, String phone, String email) async{
+    await FirebaseFirestore.instance.collection('users').add({
+      'name': name,
+      'phone': phone,
+      'email': email
+    });
+  }
+
+  bool checkPass(){
+    if (_passWord.text.trim() == _confirm.text.trim()){
+      return true;
+    }else{
+      return false;
     }
   }
 
@@ -41,8 +72,17 @@ class RegisterState extends State<Register> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 45),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'login');
+                  },
+                  child: Icon(Icons.arrow_back_ios),
+                ),
+              ),
               Container(
-                padding: EdgeInsets.only(left: 35, top: 100),
+                padding: EdgeInsets.only(left: 50, top: 100, right: 35),
                 child: Text(
                   'Đăng ký tài khoản',
                   style: TextStyle(color: Colors.black, fontSize: 33),
@@ -54,6 +94,7 @@ class RegisterState extends State<Register> {
                   child: Column(
                     children: [
                       TextField(
+                        controller: _name,
                         decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
@@ -65,10 +106,11 @@ class RegisterState extends State<Register> {
                         height: 30,
                       ),
                       TextField(
+                        controller: _emailText,
                         decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
-                            hintText: 'Nhập tài khoản',
+                            hintText: 'Nhập email',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
                       ),
@@ -89,29 +131,19 @@ class RegisterState extends State<Register> {
                         height: 20,
                       ),
                       TextField(
+                        obscureText: true,
                         decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
                             hintText: 'Xác nhận mật khẩu',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10))),
-                      ),
+                      ),    
                       SizedBox(
                         height: 20,
                       ),
                       TextField(
-                        controller: _emailText,
-                        decoration: InputDecoration(
-                            fillColor: Colors.grey.shade100,
-                            filled: true,
-                            hintText: 'Nhập email',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextField(
+                        controller: _phone,
                         decoration: InputDecoration(
                             fillColor: Colors.grey.shade100,
                             filled: true,
@@ -135,13 +167,17 @@ class RegisterState extends State<Register> {
                             backgroundColor: Color(0xff4c505b),
                             child: IconButton(
                               color: Colors.white,
-                              onPressed: () {
-                               FirebaseAuth.instance
+                              onPressed: () {         
+                                FirebaseAuth.instance
                                     .createUserWithEmailAndPassword(
                                         email: _emailText.text,
                                         password: _passWord.text)
                                     .then((value) {
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                                  addUser(_name.text.trim(), _phone.text.trim(), _emailText.text.trim());
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Login()));
                                   Fluttertoast.showToast(
                                     msg: 'Tạo tài khoản thành công',
                                     toastLength: Toast.LENGTH_SHORT,
