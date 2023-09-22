@@ -1,91 +1,340 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/homepage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
+
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  final user = FirebaseAuth.instance.currentUser;
+  final _weight = TextEditingController();
+  final _height = TextEditingController();
+  bool isAnswer = false;
+
+  static const values = <String>['Tăng cơ / Giảm mỡ', 'Tăng sức mạnh'];
+  String selectedValue = values.first;
+  final selectedColor = Colors.green;
+  final unselectedColor = Colors.grey;
+
+  String _value = 'Chưa có kinh nghiệm';
+  var _items = ['Chưa có kinh nghiệm', '3 tháng', '6 tháng', 'Trên 1 năm'];
+
+  String _zIndex = 'Ít vận động';
+  var _zindexs = [
+    'Ít vận động',
+    'Vận động nhẹ',
+    'Vận động vừa',
+    'Vận động nhiều',
+    'Vận động nặng'
+  ];
+
+  String id = " ";
+  String name = " ";
+  Future getUserByEmail(String? email) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        id = doc.reference.id;
+        setState(() {
+          this.name = '${doc['name']}';
+        });
+      });
+    });
+  }
+
+  Future addUserWH() async {
+    await FirebaseFirestore.instance.collection("users").doc(id).update({
+      'weight(kg)': _weight.text.trim(),
+      'height(cm)': _height.text.trim(),
+      'exp': _value,
+      'isAnswer': isAnswer
+    });
+  }
+
+  Widget radioWidget() => Column(
+        children: values.map((value) {
+          return RadioListTile<String>(
+            value: value,
+            groupValue: selectedValue,
+            title: Text(
+              value,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            onChanged: (value) => setState(() => this.selectedValue = value!),
+          );
+        }).toList(),
+      );
+
+  @override
+  void initState() {
+    getUserByEmail(user?.email);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _weight.dispose();
+    _height.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
     return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/workout.jpg'), fit: BoxFit.cover)),
       child: Scaffold(
-        body: Stack(
-          children: [
-            Container(
-              padding: EdgeInsets.only(top: 200),
-              child: Column(
-                children: [
-                  Text(
-                    'Chào mừng bạn đến với HealthApp',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'Để bắt đầu hãy cho chúng tôi biết một chút thông tin của bạn',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 320, left: 50, right: 50),
-              child: Column(
-                children: [
-                  TextField(
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                        border: myInputBorder(),
-                        enabledBorder: myInputBorder(),
-                        focusedBorder: myInputBorder(),
-                        labelText: 'Cân nặng',
-                        labelStyle: TextStyle(color: Colors.deepPurple),
-                        hintText: 'kg',
-                        hintStyle: TextStyle(color: Colors.deepPurple),
-                        alignLabelWithHint: true),
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  TextField(
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                        border: myInputBorder(),
-                        enabledBorder: myInputBorder(),
-                        focusedBorder: myInputBorder(),
-                        labelText: 'Chiều cao',
-                        labelStyle: TextStyle(color: Colors.deepPurple),
-                        hintText: 'cm',
-                        hintStyle: TextStyle(color: Colors.deepPurple),
-                        alignLabelWithHint: true),
-                  ),
-                  SizedBox(height: 60),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'continue');
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(colors: [
-                          Color(0xff44A3AE),
-                          Color(0xff33FBC9),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 80),
+                child: Column(
+                  children: [
+                    Text(
+                      'Chào mừng ' + name + ' đến với HealthApp',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 6),
+                      child: Container(
+                        width: 400,
+                        height: 540,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ],
+                        ),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'THÔNG TIN CỦA BẠN',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: 35,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 50, right: 50),
+                            child: TextField(
+                              controller: _weight,
+                              textAlign: TextAlign.left,
+                              decoration: InputDecoration(
+                                  border: myInputBorder(),
+                                  enabledBorder: myInputBorder(),
+                                  focusedBorder: myInputBorder(),
+                                  labelText: 'Cân nặng (theo kilogram)',
+                                  labelStyle:
+                                      TextStyle(color: Colors.deepPurple),
+                                  hintStyle:
+                                      TextStyle(color: Colors.deepPurple),
+                                  alignLabelWithHint: true),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 50, right: 50),
+                            child: TextField(
+                              controller: _height,
+                              textAlign: TextAlign.left,
+                              decoration: InputDecoration(
+                                  border: myInputBorder(),
+                                  enabledBorder: myInputBorder(),
+                                  focusedBorder: myInputBorder(),
+                                  labelText: 'Chiều cao (theo centimet)',
+                                  labelStyle:
+                                      TextStyle(color: Colors.deepPurple),
+                                  hintStyle:
+                                      TextStyle(color: Colors.deepPurple),
+                                  alignLabelWithHint: true),
+                            ),
+                          ),
+                          SizedBox(height: 40),
+                          Text(
+                            'KINH NGHIỆM TẬP LUYỆN',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsets.only(top: 20, left: 50, right: 50),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 5, vertical: 4),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.black, width: 3),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownButton(
+                                  items: _items.map((String item) {
+                                    return DropdownMenuItem(
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ));
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      this._value = value!;
+                                    });
+                                  },
+                                  borderRadius: BorderRadius.circular(10),
+                                  value: _value,
+                                  icon: Icon(Icons.arrow_drop_down_rounded),
+                                  iconSize: 40,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'CƯỜNG ĐỘ HOẠT ĐỘNG',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 3),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: DropdownButton(
+                                items: _zindexs.map((String index) {
+                                  return DropdownMenuItem(
+                                      value: index,
+                                      child: Text(
+                                        index,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ));
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    this._zIndex = value!;
+                                  });
+                                },
+                                borderRadius: BorderRadius.circular(10),
+                                value: _zIndex,
+                                icon: Icon(Icons.arrow_drop_down_rounded),
+                                iconSize: 40,
+                                alignment: Alignment.center,
+                                style: TextStyle(
+                                    fontSize: 20, color: Colors.black)),
+                          ),
                         ]),
                       ),
-                      width: size.width,
-                      child: Text(
-                        'Tiếp tục',
-                        style: TextStyle(fontSize: 25, color: Colors.white),
-                        textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 6),
+                      child: Container(
+                        width: 400,
+                        height: 540,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'MỤC TIÊU TẬP LUYỆN',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            radioWidget()
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20, top: 10),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            this.isAnswer = true;
+                          });
+                          addUserWH();
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) => HomePage()));
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: LinearGradient(colors: [
+                              Color(0xff44A3AE),
+                              Color(0xff33FBC9),
+                            ]),
+                          ),
+                          width: size.width * 0.8,
+                          child: Text(
+                            'HOÀN TẤT',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -94,6 +343,7 @@ class Home extends StatelessWidget {
 
 OutlineInputBorder myInputBorder() {
   return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
-      borderSide: BorderSide(color: Colors.deepPurple, width: 3));
+    borderRadius: BorderRadius.circular(10),
+    borderSide: BorderSide(color: Colors.deepPurple, width: 3),
+  );
 }
