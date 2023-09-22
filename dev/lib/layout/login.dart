@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/auth.dart';
 import 'package:dev/layout/home.dart';
+import 'package:dev/layout/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,28 +19,50 @@ class LoginState extends State<Login> {
   String? errorMessage;
   bool hidePass = true;
 
+
   final _email = TextEditingController();
   final _pass = TextEditingController();
-
   @override
-  void dispose(){
+  void dispose() {
     _email.dispose();
     _pass.dispose();
     super.dispose();
   }
 
   Future<void> signInWithEmailAndPassWord() async {
-    try{
-      await Auth().signInWithEmailAndPassWord(email: _email.text.trim(), password: _pass.text.trim());
-    }on FirebaseAuthException catch (e){
-      setState(() {
-        errorMessage = e.message;
-      });
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email.text.trim(), password: _pass.text.trim());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+        Fluttertoast.showToast(
+          msg: 'KHÔNG TÌM THẤY TÀI KHOẢN',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 80, 182, 133),
+          fontSize: 20,
+        );
+      }
     }
   }
 
-  
-
+  void showError(String message) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.deepPurple,
+            title: Center(
+              child: Text(
+                message,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,19 +147,8 @@ class LoginState extends State<Login> {
                               color: Colors.white,
                               onPressed: () {
                                 signInWithEmailAndPassWord();
-                                Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Home()));
-                                  Fluttertoast.showToast(
-                                    msg: 'Đăng nhập thành công',
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 2,
-                                    textColor: Colors.white,
-                                    backgroundColor: const Color.fromARGB(255, 80, 182, 133),
-                                    fontSize: 20,
-                                  );
+                                // Navigator.of(context).push(MaterialPageRoute(
+                                //     builder: (context) => Home()));              
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),
@@ -146,11 +161,11 @@ class LoginState extends State<Login> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, 'register');
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
                             },
-                            child: Text(
+                            child: const Text(
                               'Đăng ký',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
