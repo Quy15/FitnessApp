@@ -40,14 +40,9 @@ class RegisterState extends State<Register> {
     super.dispose();
   }
 
-  
-
-  final DatabaseReference _dbref = FirebaseDatabase.instance.ref('users');
-  
-
   Future signUp () async {
     if (checkPass()){
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailText.text.trim(), password: _passWord.text.trim()
       );
 
@@ -61,6 +56,7 @@ class RegisterState extends State<Register> {
       'phone': phone,
       'email': email,
       'password': pass,
+      'isAnswer': false,
     });
   }
 
@@ -178,7 +174,7 @@ class RegisterState extends State<Register> {
                               backgroundColor: Color(0xff4c505b),
                               child: IconButton(
                                 color: Colors.white,
-                                onPressed: () {         
+                                onPressed: () {      
                                   FirebaseAuth.instance
                                       .createUserWithEmailAndPassword(
                                           email: _emailText.text,
