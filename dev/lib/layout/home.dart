@@ -56,7 +56,15 @@ class _HomeState extends State<Home> {
       'weight(kg)': _weight.text.trim(),
       'height(cm)': _height.text.trim(),
       'exp': _value,
+      'z-index': _zIndex,
       'isAnswer': isAnswer
+    });
+  }
+
+  Future addPurpose() async {
+    await FirebaseFirestore.instance.collection("trainning_purpose").doc().set({
+      'purpose': selectedValue,
+      'user_id':  id
     });
   }
 
@@ -309,6 +317,7 @@ class _HomeState extends State<Home> {
                             this.isAnswer = true;
                           });
                           addUserWH();
+                          addPurpose();
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) => HomePage()));
                         },

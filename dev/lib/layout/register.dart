@@ -41,6 +41,7 @@ class RegisterState extends State<Register> {
     super.dispose();
   }
 
+
   final DatabaseReference _dbref = FirebaseDatabase.instance.ref('users');
 
   Future signUp(String mail, String pass, String name, String phone) async {
@@ -70,6 +71,7 @@ class RegisterState extends State<Register> {
       'phone': phone,
       'email': email,
       'password': pass,
+      'isAnswer': false,
     });
   }
 
