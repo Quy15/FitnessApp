@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/auth.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/register.dart';
+import 'package:dev/layout/register_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -135,10 +136,17 @@ class LoginState extends State<Login> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Đăng nhập',
-                            style: TextStyle(
-                                fontSize: 27, fontWeight: FontWeight.w700),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Quên mật khẩu',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color(0xff4c505b),
+                              ),
+                            ),
                           ),
                           CircleAvatar(
                             radius: 30,
@@ -169,17 +177,21 @@ class LoginState extends State<Login> {
                               'Đăng ký',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Color(0xff4c505b),
                               ),
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {},
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => RegisterPT()));
+                            },
                             child: Text(
-                              'Quên mật khẩu',
+                              'Đăng ký PT',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Color(0xff4c505b),
                               ),
