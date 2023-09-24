@@ -21,10 +21,8 @@ class MyAuth extends StatelessWidget {
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        id = doc.reference.id;
-        print(id);       
+        id = doc.reference.id;       
         isAnswered = bool.parse("${doc['isAnswer']}");
-        print(isAnswered);
       });
     });
 

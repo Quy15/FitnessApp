@@ -31,8 +31,14 @@ class LoginState extends State<Login> {
 
   Future<void> signInWithEmailAndPassWord() async {
     try {
+      showDialog(context: context, builder: (context){
+        return Center(child: const CircularProgressIndicator());
+      });
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: _email.text.trim(), password: _pass.text.trim());
+      
+      Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         Fluttertoast.showToast(
@@ -48,21 +54,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  void showError(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            title: Center(
-              child: Text(
-                message,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        });
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
