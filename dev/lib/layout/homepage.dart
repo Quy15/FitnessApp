@@ -1,18 +1,20 @@
+import 'package:dev/layout/login.dart';
 import 'package:dev/tablayout/tab_home.dart';
 import 'package:dev/tablayout/tab_setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   _HomePageState createState() => _HomePageState();
 }
 
-void signOut() {
-  FirebaseAuth.instance.signOut();
+void signOut() async {
+  await FirebaseAuth.instance.signOut();
 }
+
 
 class _HomePageState extends State<HomePage>{
   final screen = [HomeTab(), Setting(), Setting()];
@@ -49,5 +51,4 @@ class _HomePageState extends State<HomePage>{
         ),
     );
   }
-
 }

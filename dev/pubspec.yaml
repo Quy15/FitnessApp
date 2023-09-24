@@ -28,9 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  email_validator: '^2.1.16'
+  flutter_pw_validator: ^1.6.0
   flutter:
     sdk: flutter
-
   #bloc
   flutter_bloc: ^7.1.0
 
