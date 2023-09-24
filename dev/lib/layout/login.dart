@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/auth.dart';
+import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
+import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/register.dart';
 import 'package:dev/layout/register_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +21,9 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   String? errorMessage;
   bool hidePass = true;
+  String? admin = "admin";
+  String? user = "user";
+  String? trainer = "trainer";
 
   final _email = TextEditingController();
   final _pass = TextEditingController();
@@ -31,9 +36,18 @@ class LoginState extends State<Login> {
 
   Future<void> signInWithEmailAndPassWord(String email, String pw) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pw);
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Home()));
-      clearTextField();
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pw);
+      String? userType = await getTypeByEmail(email);
+      if (userType == admin) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
+        clearTextField();
+      } else if (userType == user || userType == "") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomePage()));
+        clearTextField();
+      }
       Fluttertoast.showToast(
         msg: 'Đăng nhập thành công',
       );
@@ -53,6 +67,23 @@ class LoginState extends State<Login> {
           msg: 'Đăng nhập thất bại',
         );
       }
+    }
+  }
+
+  Future<String?> getTypeByEmail(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs[0]['type'] as String?;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Lỗi khi truy vấn Firestore: $e');
+      return null;
     }
   }
 
@@ -92,7 +123,7 @@ class LoginState extends State<Login> {
         });
   }
 
-  void clearTextField(){
+  void clearTextField() {
     _email.clear();
     _pass.clear();
   }
@@ -188,7 +219,8 @@ class LoginState extends State<Login> {
                             child: IconButton(
                               color: Colors.white,
                               onPressed: () {
-                                signInWithEmailAndPassWord(_email.text.trim(), _pass.text.trim());
+                                signInWithEmailAndPassWord(
+                                    _email.text.trim(), _pass.text.trim());
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),

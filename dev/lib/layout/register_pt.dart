@@ -39,13 +39,14 @@ class RegisterState extends State<RegisterPT> {
       DateTime dOB) async{
     final docPt =  FirebaseFirestore.instance.collection('trainers').doc();
     final data = {
-      'active': true,
+      'active': false,
       'date_of_birth': dOB,
       'experience': experience,
       'name': name,
       'mobile': phone,
       'email': email,
       'id': docPt.id,
+      'type': "trainer",
     };
     await docPt.set(data);
   }
