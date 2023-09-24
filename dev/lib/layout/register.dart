@@ -72,6 +72,7 @@ class RegisterState extends State<Register> {
       'email': email,
       'password': pass,
       'isAnswer': false,
+      'type': "user",
     });
   }
 
