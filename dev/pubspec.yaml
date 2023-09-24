@@ -40,7 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_swiper_view: ^1.1.8
   google_nav_bar: ^5.0.6
-
+  flutter_settings_screens: 0.3.3-null-safety+2
 
   #FirebaseDatabase
   firebase_auth: ^4.9.0

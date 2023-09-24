@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
                     Text(
                       'Chào mừng ' + name + ' đến với HealthApp',
                       style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.normal),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(
@@ -144,7 +144,7 @@ class _HomeState extends State<Home> {
                           Text(
                             'THÔNG TIN CỦA BẠN',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.normal),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
@@ -191,7 +191,7 @@ class _HomeState extends State<Home> {
                           Text(
                             'KINH NGHIỆM TẬP LUYỆN',
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20, fontWeight: FontWeight.normal),
                           ),
                           Padding(
                             padding:

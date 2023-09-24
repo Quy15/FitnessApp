@@ -36,8 +36,12 @@ class LoginState extends State<Login> {
 
   Future<void> signInWithEmailAndPassWord(String email, String pw) async {
     try {
+      showDialog(context: context, builder: (context){
+        return Center(child: const CircularProgressIndicator());
+      });
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
+      Navigator.pop(context);
       String? userType = await getTypeByEmail(email);
       if (userType == admin) {
         Navigator.of(context)
@@ -107,21 +111,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  void showError(String message) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Colors.deepPurple,
-            title: Center(
-              child: Text(
-                message,
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          );
-        });
-  }
+ 
 
   void clearTextField() {
     _email.clear();
