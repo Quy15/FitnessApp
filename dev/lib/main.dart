@@ -1,3 +1,4 @@
+import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/auth_page.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
@@ -7,6 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'admin/admin_manage_user.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +34,9 @@ class MyApp extends StatelessWidget {
       
       routes: {
         'home': (context) => Home(),   
-        'homepage': (context) => HomePage()
+        'homepage': (context) => HomePage(),
+        'admin_homepage': (context) => AdminHomePage(),
+        'admin_manage_user': (context) => AdminManageUser(),
       },
       home: AuthPage(),
     );

@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/auth.dart';
+import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
+import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/register.dart';
+import 'package:dev/layout/register_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,7 +21,9 @@ class Login extends StatefulWidget {
 class LoginState extends State<Login> {
   String? errorMessage;
   bool hidePass = true;
-
+  String? admin = "admin";
+  String? user = "user";
+  String? trainer = "trainer";
 
   final _email = TextEditingController();
   final _pass = TextEditingController();
@@ -29,20 +34,31 @@ class LoginState extends State<Login> {
     super.dispose();
   }
 
-  Future<void> signInWithEmailAndPassWord() async {
+  Future<void> signInWithEmailAndPassWord(String email, String pw) async {
     try {
       showDialog(context: context, builder: (context){
         return Center(child: const CircularProgressIndicator());
       });
-
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _email.text.trim(), password: _pass.text.trim());
-      
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: pw);
       Navigator.pop(context);
+      String? userType = await getTypeByEmail(email);
+      if (userType == admin) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
+        clearTextField();
+      } else if (userType == user || userType == "") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomePage()));
+        clearTextField();
+      }
+      Fluttertoast.showToast(
+        msg: 'Đăng nhập thành công',
+      );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         Fluttertoast.showToast(
-          msg: 'KHÔNG TÌM THẤY TÀI KHOẢN',
+          msg: 'Sai mật khẩu hoặc tài khoản',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 2,
@@ -50,11 +66,57 @@ class LoginState extends State<Login> {
           backgroundColor: const Color.fromARGB(255, 80, 182, 133),
           fontSize: 20,
         );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Đăng nhập thất bại',
+        );
+      }
+    }
+  }
+
+  Future<String?> getTypeByEmail(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs[0]['type'] as String?;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Lỗi khi truy vấn Firestore: $e');
+      return null;
+    }
+  }
+
+  Future<void> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      Fluttertoast.showToast(
+        msg:
+            'Vui lòng kiểm tra mail để đổi mật khẩu\nNếu chưa nhận được, vui lòng kiểm tra lại mail đã nhập',
+      );
+    } on FirebaseAuthException catch (e) {
+      if (email == null) {
+        Fluttertoast.showToast(
+          msg: 'Vui lòng nhập email để tiến hành gửi mail đổi mật khẩu',
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Vui lòng kiểm tra lại email',
+        );
       }
     }
   }
 
  
+
+  void clearTextField() {
+    _email.clear();
+    _pass.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,10 +189,19 @@ class LoginState extends State<Login> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Đăng nhập',
-                            style: TextStyle(
-                                fontSize: 27, fontWeight: FontWeight.w700),
+                          TextButton(
+                            onPressed: () {
+                              resetPassword(_email.text.trim());
+                            },
+                            child: Text(
+                              'Quên mật khẩu',
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Color(0xff4c505b),
+                              ),
+                            ),
                           ),
                           CircleAvatar(
                             radius: 30,
@@ -138,9 +209,8 @@ class LoginState extends State<Login> {
                             child: IconButton(
                               color: Colors.white,
                               onPressed: () {
-                                signInWithEmailAndPassWord();
-                                // Navigator.of(context).push(MaterialPageRoute(
-                                //     builder: (context) => Home()));              
+                                signInWithEmailAndPassWord(
+                                    _email.text.trim(), _pass.text.trim());
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),
@@ -155,23 +225,29 @@ class LoginState extends State<Login> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => Register()));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Register()));
                             },
                             child: const Text(
                               'Đăng ký',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Color(0xff4c505b),
                               ),
                             ),
                           ),
-                          TextButton(
-                            onPressed: () {},
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => RegisterPT()));
+                            },
                             child: Text(
-                              'Quên mật khẩu',
+                              'Đăng ký PT',
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 18,
                                 color: Color(0xff4c505b),
                               ),
