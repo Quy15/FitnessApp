@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/login.dart';
+import 'package:dev/tablayout/tab_call.dart';
 import 'package:dev/tablayout/tab_home.dart';
 import 'package:dev/tablayout/tab_setting.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +19,8 @@ void signOut() async {
 
 
 class _HomePageState extends State<HomePage>{
-  final screen = [HomeTab(), Setting(), Setting()];
+  
+  final screen = [HomeTab(), Call(), Setting()];
   int index = 0;
   @override
   Widget build(BuildContext context) {

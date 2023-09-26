@@ -19,7 +19,8 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+  );
 
   runApp(MyApp());
 }
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'HealthApp',
       routes: {
+        'login': (context) => Login(),
         'home': (context) => Home(),   
         'homepage': (context) => HomePage(),
         'admin_homepage': (context) => AdminHomePage(),

@@ -67,6 +67,7 @@ class RegisterState extends State<Register> {
 
   Future addUser(String name, String phone, String email, String pass) async {
     await FirebaseFirestore.instance.collection('users').doc().set({
+      'id': FirebaseFirestore.instance.collection('users').doc().id,
       'name': name,
       'phone': phone,
       'email': email,

@@ -21,6 +21,7 @@ class RegisterState extends State<RegisterPT> {
   final _active = TextEditingController();
   final _dateOfBirth = TextEditingController();
   final _experience = TextEditingController();
+  final _qualification = TextEditingController();
   final _id = TextEditingController();
 
   @override
@@ -31,17 +32,19 @@ class RegisterState extends State<RegisterPT> {
     _active.dispose();
     _dateOfBirth.dispose();
     _experience.dispose();
+    _qualification.dispose();
     _id.dispose();
     super.dispose();
   }
 
-  Future addUser(String name, String phone, String email, String experience,
+  Future addUser(String name, String phone, String email, String experience, String qualification,
       DateTime dOB) async{
     final docPt =  FirebaseFirestore.instance.collection('trainers').doc();
     final data = {
       'active': false,
       'date_of_birth': dOB,
       'experience': experience,
+      'qualification': qualification,
       'name': name,
       'mobile': phone,
       'email': email,
@@ -134,6 +137,18 @@ class RegisterState extends State<RegisterPT> {
                       SizedBox(
                         height: 30,
                       ),
+                      TextField(
+                        controller: _qualification,
+                        decoration: InputDecoration(
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            labelText: 'Chuyên môn',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
                       TextFormField(
                         controller: _dateOfBirth,
                         readOnly: true,
@@ -194,6 +209,7 @@ class RegisterState extends State<RegisterPT> {
                               addUser(_name.text.trim(), _phone.text.trim(),
                                   _emailText.text.trim(),
                                   _experience.text.trim(),
+                                  _qualification.text.trim(),
                                   DateTime.parse(_dateOfBirth.text));
                               Navigator.pop(context);
                               showToastSuccess();
