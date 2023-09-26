@@ -58,6 +58,7 @@ class  SettingState extends State <Setting> {
       child: Icon(Icons.logout, color: Colors.white,)),
     onTap: () {
         signOut();
+        Navigator.pushNamed(context, 'login');
     },
   );
 

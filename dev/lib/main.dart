@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'HealthApp',
-      
       routes: {
+        'login': (context) => Login(),
         'home': (context) => Home(),   
         'homepage': (context) => HomePage(),
         'admin_homepage': (context) => AdminHomePage(),
