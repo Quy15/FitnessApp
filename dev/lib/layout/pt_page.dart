@@ -1,28 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dev/layout/login.dart';
-import 'package:dev/tablayout/tab_call.dart';
 import 'package:dev/tablayout/tab_chat.dart';
 import 'package:dev/tablayout/tab_home.dart';
+import 'package:dev/tablayout/tab_homept.dart';
 import 'package:dev/tablayout/tab_setting.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class PTPage extends StatefulWidget {
+  const PTPage({super.key});
 
-  _HomePageState createState() => _HomePageState();
+  @override
+  State<PTPage> createState() => _PTPageState();
 }
 
-void signOut() async {
-  await FirebaseAuth.instance.signOut();
-}
-
-
-class _HomePageState extends State<HomePage>{
-  
-  final screen = [HomeTab(), Chat(), Setting()];
+class _PTPageState extends State<PTPage> {
+   final screen = [HomePT(), Chat(), Setting()];
   int index = 0;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

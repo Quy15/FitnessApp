@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,10 +23,11 @@ class RegisterState extends State<RegisterPT> {
   final _dateOfBirth = TextEditingController();
   final _experience = TextEditingController();
   final _qualification = TextEditingController();
+  final _teachdays = TextEditingController();
   final _id = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     _emailText.dispose();
     _name.dispose();
     _phone.dispose();
@@ -33,13 +35,16 @@ class RegisterState extends State<RegisterPT> {
     _dateOfBirth.dispose();
     _experience.dispose();
     _qualification.dispose();
+    _teachdays.dispose();
     _id.dispose();
     super.dispose();
   }
 
-  Future addUser(String name, String phone, String email, String experience, String qualification,
-      DateTime dOB) async{
-    final docPt =  FirebaseFirestore.instance.collection('trainers').doc();
+  
+
+  Future addUser(String name, String phone, String email, String experience,
+      String qualification, DateTime dOB, String teachdays) async {
+    final docPt = FirebaseFirestore.instance.collection('trainers').doc();
     final data = {
       'active': false,
       'date_of_birth': dOB,
@@ -49,6 +54,7 @@ class RegisterState extends State<RegisterPT> {
       'mobile': phone,
       'email': email,
       'id': docPt.id,
+      'teachdays': teachdays,
       'type': "trainer",
     };
     await docPt.set(data);
@@ -56,29 +62,35 @@ class RegisterState extends State<RegisterPT> {
 
   void showToastSuccess() {
     Fluttertoast.showToast(
-      msg: 'Thông tin của bạn đã được ghi nhận, vui lòng đợi thông tin gửi về mail',
+      msg:
+          'Thông tin của bạn đã được ghi nhận, vui lòng đợi thông tin gửi về mail',
     );
   }
+
   void showToastValidation() {
     Fluttertoast.showToast(
       msg: 'Vui lòng nhập đầy đủ thông tin',
     );
   }
+
   void showToastValidationEmail() {
     Fluttertoast.showToast(
       msg: 'Email không hợp lệ',
     );
   }
+
   void showToastValidationPhone() {
     Fluttertoast.showToast(
       msg: 'Số điện thoại không hợp lệ',
     );
   }
+
   bool isPhoneNoValid(String? phoneNo) {
     if (phoneNo == null) return false;
     final regExp = RegExp(r'(^(?:[+0]9)?[0-9]{10,12}$)');
     return regExp.hasMatch(phoneNo);
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -90,7 +102,7 @@ class RegisterState extends State<RegisterPT> {
           body: Stack(
             children: [
               Container(
-                  padding: EdgeInsets.only(left: 110, top: 100, right: 35),
+                padding: EdgeInsets.only(left: 110, top: 100, right: 35),
                 child: Text(
                   'Đăng ký PT',
                   style: TextStyle(color: Colors.black, fontSize: 33),
@@ -171,7 +183,7 @@ class RegisterState extends State<RegisterPT> {
                               if (selectedDate != null) {
                                 // Cập nhật giá trị ngày sinh vào controller
                                 _dateOfBirth.text =
-                                "${selectedDate.toLocal()}".split(' ')[0];
+                                    "${selectedDate.toLocal()}".split(' ')[0];
                               }
                             },
                           ),
@@ -190,27 +202,43 @@ class RegisterState extends State<RegisterPT> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       SizedBox(
+                        height: 30,
+                      ),
+                      TextField(
+                        controller: _teachdays,
+                        decoration: InputDecoration(
+                            fillColor: Colors.grey.shade100,
+                            filled: true,
+                            labelText: 'Số buổi có thể dạy',
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                      ),
+                      SizedBox(
                         height: 50,
                       ),
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
-                            if (_name.text.trim() == "" || _phone.text.trim() == "" || _emailText.text.trim() == ""
-                            || _experience.text.trim() == "" || _dateOfBirth.text == null) {
+                            if (_name.text.trim() == "" ||
+                                _phone.text.trim() == "" ||
+                                _emailText.text.trim() == "" ||
+                                _experience.text.trim() == "" ||
+                                _dateOfBirth.text == null) {
                               showToastValidation();
-                            } else if(!EmailValidator.validate(_emailText.text.trim()))
-                            {
-                                showToastValidationEmail();
-                            } else if(!isPhoneNoValid(_phone.text.trim()))
-                            {
+                            } else if (!EmailValidator.validate(
+                                _emailText.text.trim())) {
+                              showToastValidationEmail();
+                            } else if (!isPhoneNoValid(_phone.text.trim())) {
                               showToastValidationPhone();
-                            }
-                            else {
-                              addUser(_name.text.trim(), _phone.text.trim(),
+                            } else {
+                              addUser(
+                                  _name.text.trim(),
+                                  _phone.text.trim(),
                                   _emailText.text.trim(),
                                   _experience.text.trim(),
                                   _qualification.text.trim(),
-                                  DateTime.parse(_dateOfBirth.text));
+                                  DateTime.parse(_dateOfBirth.text),
+                                  _teachdays.text.trim());
                               Navigator.pop(context);
                               showToastSuccess();
                             }
@@ -218,7 +246,8 @@ class RegisterState extends State<RegisterPT> {
                           style: ElevatedButton.styleFrom(
                             primary: Colors.blue, // Màu nền của nút
                             onPrimary: Colors.white, // Màu văn bản trên nút
-                            padding: EdgeInsets.only(right: 90, left: 90, top: 15,bottom: 15),
+                            padding: EdgeInsets.only(
+                                right: 90, left: 90, top: 15, bottom: 15),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -232,14 +261,23 @@ class RegisterState extends State<RegisterPT> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Bạn đã có tài khoản", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),),
-
+                          Text(
+                            "Bạn đã có tài khoản",
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.bold),
+                          ),
                           GestureDetector(
-                              onTap: (){
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Login()));
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Login()));
                               },
-                              child: Text("Đăng nhập ngay", style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: Colors.blue),)
-                          )
+                              child: Text(
+                                "Đăng nhập ngay",
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue),
+                              ))
                         ],
                       )
                     ],

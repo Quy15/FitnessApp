@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
+import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 class Call extends StatefulWidget {
   const Call({super.key});
@@ -11,7 +12,6 @@ class Call extends StatefulWidget {
 }
 
 class _CallState extends State<Call> {
-
   final user = FirebaseAuth.instance.currentUser;
 
   String callID = "1";
@@ -34,28 +34,68 @@ class _CallState extends State<Call> {
     });
   }
 
+  String ui = " ";
+  String user2 = " ";
+  Future getUserByemail() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: "steve@gmail.com")
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        setState(() {
+          ui = doc.reference.id;
+          this.user2 = '${doc['email']}';
+          print(ui);
+          print(user2);
+        });
+      });
+    });
+  }
+
   @override
   void initState(){
     getUserByEmail(user?.email);
+    getUserByemail();
     super.initState();
   }
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
+
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: ElevatedButton(
-            child: Text('Alooooooooooo'),
-            onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: callID, username: name)));
-            },
+          child: Column(
+            children: [
+              ElevatedButton(
+                child: Text('Alooooooooooo'),
+                onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: callID, username: name)));
+                },
+              ),
+              actionButton(false),
+              actionButton(true)
+            ],
           ),
         ),
       ),
     );
   }
+
+  ZegoSendCallInvitationButton actionButton(bool isVideo) => 
+    ZegoSendCallInvitationButton(
+      isVideoCall: isVideo,
+      resourceID: "zegouikit_call",
+      invitees: [
+        ZegoUIKitUser(
+          id: name,
+          name: name, 
+        )
+      ],
+    );
+
 }
 
 class CallView extends StatelessWidget {
@@ -76,3 +116,4 @@ class CallView extends StatelessWidget {
     );
   }
 }
+

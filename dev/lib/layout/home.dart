@@ -16,6 +16,7 @@ class _HomeState extends State<Home> {
   final _weight = TextEditingController();
   final _height = TextEditingController();
   final _heathstatus = TextEditingController();
+  final _prequentcy = TextEditingController();
   bool isAnswer = false;
 
   static const values = <String>[
@@ -71,8 +72,8 @@ class _HomeState extends State<Home> {
   Future addPurpose() async {
     await FirebaseFirestore.instance
         .collection("trainning_purpose")
-        .doc()
-        .set({'purpose': selectedValue, 'user_id': id});
+        .doc(id)
+        .set({'purpose': selectedValue, 'prequently': _prequentcy.text.trim(),'user_id': id});
   }
 
   Widget radioWidget() => Column(
@@ -100,6 +101,7 @@ class _HomeState extends State<Home> {
     _weight.dispose();
     _height.dispose();
     _heathstatus.dispose();
+    _prequentcy.dispose();
     super.dispose();
   }
 
@@ -371,7 +373,61 @@ class _HomeState extends State<Home> {
                                   filled: true,
                                 ),
                               ),
-                            )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 6),
+                      child: Container(
+                        width: 400,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black, width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'SỐ BUỔI CÓ THỂ TẬP TRONG MỘT TUẦN',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: size.width * 0.8,
+                              child: TextField(
+                                controller: _prequentcy,
+                                decoration: InputDecoration(
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.black),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.deepPurpleAccent),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  hintText: 'Tình trạng sức khỏe của bạn ....',
+                                  fillColor: Colors.grey[200],
+                                  filled: true,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
