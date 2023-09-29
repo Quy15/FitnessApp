@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/pt_detail.dart';
+import 'package:dev/tablayout/get_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,8 @@ class _HomeTab extends State<HomeTab> {
   final user = FirebaseAuth.instance.currentUser;
 
   String id = " ";
-  String name = " ";
+  String uname = " ";
+  String prequently = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -21,26 +24,53 @@ class _HomeTab extends State<HomeTab> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          id = doc.reference.id;
-          this.name = '${doc['name']}';
+          id = '${doc['id']}';
+          this.uname = '${doc['name']}';
           print(id);
         });
       });
     });
-  }
 
-  String purpose = " ";
-  Future getPurpose() async {
     await FirebaseFirestore.instance
         .collection("trainning_purpose")
         .where("user_id", isEqualTo: id)
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        this.purpose = '${doc['purpose']}';
-        print(purpose);
+        setState(() {
+          this.prequently = '${doc['prequently']}';
+        });
+        print(prequently);
       });
     });
+  }
+
+  // Future getPurpose() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("trainning_purpose")
+  //       .where("user_id", isEqualTo: id)
+  //       .get()
+  //       .then((QuerySnapshot snapshot) {
+  //     snapshot.docs.forEach((DocumentSnapshot doc) {
+  //       this.prequently = '${doc['purpose']}';
+  //       print(prequently);
+  //     });
+  //   });
+  // }
+
+  List<String> ptIDs = [];
+
+  Future getPT() async {
+    await FirebaseFirestore.instance
+          .collection("trainers")
+          .where("active", isEqualTo: true)
+          .where("teachdays", isEqualTo: prequently)
+          .get()
+          .then((QuerySnapshot snapshot){
+            snapshot.docs.forEach((DocumentSnapshot doc) { 
+              ptIDs.add(doc.reference.id);
+            });
+          });
   }
 
   Future<List<QueryDocumentSnapshot>> getPTByPurpose() async {
@@ -51,12 +81,13 @@ class _HomeTab extends State<HomeTab> {
     return snapshot.docs;
   }
 
-  String qualification = " ";
+  String teachdays = " ";
 
   @override
   void initState() {
-    // getUserByEmail(user?.email);
-    getPurpose();
+    getUserByEmail(user?.email);
+    getPT();
+    // getPurpose();
     super.initState();
   }
 
@@ -65,24 +96,11 @@ class _HomeTab extends State<HomeTab> {
     Size size = MediaQuery.sizeOf(context);
     return Scaffold(
       body: FutureBuilder(
-        future: getPTByPurpose(),
+        future: getPT(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Lỗi firebase: ' + '${snapshot.error}');
-          } else {
             return ListView.builder(
-              itemCount: snapshot.data!.length,
+              itemCount: ptIDs.length,
               itemBuilder: (context, index) {
-                var pt = snapshot.data![index];
-                qualification = pt['qualification'];
-                if (this.qualification.contains(purpose)){
-                  var name = pt['name'] as String;
-                  var experience = pt['experience'] as String;
-                  var email = pt['email'] as String;
-                  var mobile = pt['mobile'] as String;
-
                   return ListTile(
                     title: Container(
                       height: 120,
@@ -92,37 +110,14 @@ class _HomeTab extends State<HomeTab> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8.0),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            Text("Tên: "),
-                            Text(name),
-                          ]),
-                          Row(children: [
-                            Text("Kinh nghiệm: "),
-                            Text(experience),
-                          ]),
-                          Row(children: [
-                            Text("Email: "),
-                            Text(email),
-                          ]),
-                          Row(children: [
-                            Text("Số điện thoại: "),
-                            Text(mobile),
-                          ]),
-                          Row(children: [
-                            Text("Chuyên môn: "),
-                            Text(qualification),
-                          ]),
-                        ],
-                      ),
+                      child: GetPT(ptID: ptIDs[index]),
                     ),
+                    onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PTDetail()));
+                    },
                   );
-                }
               },
             );
-          }
         },
       ),
     );

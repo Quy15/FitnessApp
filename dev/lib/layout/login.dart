@@ -5,6 +5,8 @@ import 'package:dev/auth.dart';
 import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
+import 'package:dev/layout/my_auth.dart';
+import 'package:dev/layout/pt_page.dart';
 import 'package:dev/layout/register.dart';
 import 'package:dev/layout/register_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,22 +38,9 @@ class LoginState extends State<Login> {
 
   Future<void> signInWithEmailAndPassWord(String email, String pw) async {
     try {
-      showDialog(context: context, builder: (context){
-        return Center(child: const CircularProgressIndicator());
-      });
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
-      Navigator.pop(context);
-      // String? userType = await getTypeByEmail(email);
-      // if (userType == admin) {
-      //   Navigator.of(context)
-      //       .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
-      //   clearTextField();
-      // } else if (userType == user || userType == "") {
-      //   Navigator.of(context)
-      //       .push(MaterialPageRoute(builder: (context) => HomePage()));
-      //   clearTextField();
-      // }
+      String? userType = await getTypeByEmail(email);
       Fluttertoast.showToast(
         msg: 'Đăng nhập thành công',
       );
@@ -77,7 +66,7 @@ class LoginState extends State<Login> {
   Future<String?> getTypeByEmail(String email) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('trainers')
           .where('email', isEqualTo: email)
           .get();
       if (querySnapshot.docs.isNotEmpty) {

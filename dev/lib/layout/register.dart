@@ -41,14 +41,51 @@ class RegisterState extends State<Register> {
     super.dispose();
   }
 
-
   final DatabaseReference _dbref = FirebaseDatabase.instance.ref('users');
+
+  Future<UserCredential> signup(String email, password) async {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user!.uid)
+          .set({
+        'id': userCredential.user!.uid,
+        'name': _name.text.trim(),
+        'phone': _phone.text.trim(),
+        'email': email,
+        'password': password,
+        'isAnswer': false,
+        'type': "user",
+      });
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
+  }
+
+  void dk() async {
+    if (_passWord.text != _confirm.text) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Mật khẩu không hợp lệ")));
+      return;
+    }
+
+    try {
+      await signup(_emailText.text, _passWord.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
 
   Future signUp(String mail, String pass, String name, String phone) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: mail, password: pass);
-      addUser(name,phone, mail, pass);
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: mail, password: pass);
+      addUser(name, phone, mail, pass);
       return createUserSuccess;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -62,7 +99,6 @@ class RegisterState extends State<Register> {
       createUserSuccess = false;
       return createUserSuccess;
     }
-
   }
 
   Future addUser(String name, String phone, String email, String pass) async {
@@ -115,14 +151,17 @@ class RegisterState extends State<Register> {
       msg: 'Xác nhận mật khẩu không chính xác',
     );
   }
+
   void showToastUnexpectedError() {
     Fluttertoast.showToast(
       msg: 'Đã có lỗi bất thường xảy ra, vui lòng thử lại sau ',
     );
   }
+
   void showToastAlreadyExistEmail() {
     Fluttertoast.showToast(
-      msg: 'Đã có tài khoản đăng ký email này, quý khách vui lòng đổi email khác',
+      msg:
+          'Đã có tài khoản đăng ký email này, quý khách vui lòng đổi email khác',
     );
   }
 
@@ -195,9 +234,9 @@ class RegisterState extends State<Register> {
                             suffixIcon: IconButton(
                               icon: hidePass
                                   ? Icon(
-                                Icons.visibility_off,
-                                color: Colors.black,
-                              )
+                                      Icons.visibility_off,
+                                      color: Colors.black,
+                                    )
                                   : Icon(Icons.visibility),
                               onPressed: () {
                                 setState(() {
@@ -212,15 +251,14 @@ class RegisterState extends State<Register> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       new FlutterPwValidator(
-                          controller: _passWord,
-                          minLength: 6,
-                          uppercaseCharCount: 1,
-                          specialCharCount: 1,
-                          width: 400,
-                          height: 100,
-                          onSuccess: () {
-                          },
-                        ),
+                        controller: _passWord,
+                        minLength: 6,
+                        uppercaseCharCount: 1,
+                        specialCharCount: 1,
+                        width: 400,
+                        height: 100,
+                        onSuccess: () {},
+                      ),
                       SizedBox(
                         height: 20,
                       ),
@@ -231,9 +269,9 @@ class RegisterState extends State<Register> {
                             suffixIcon: IconButton(
                               icon: hidePass
                                   ? Icon(
-                                Icons.visibility_off,
-                                color: Colors.black,
-                              )
+                                      Icons.visibility_off,
+                                      color: Colors.black,
+                                    )
                                   : Icon(Icons.visibility),
                               onPressed: () {
                                 setState(() {
@@ -288,15 +326,17 @@ class RegisterState extends State<Register> {
                                 } else if (!isPhoneNoValid(
                                     _phone.text.trim())) {
                                   showToastValidationPhone();
-                                } else if (!checkPass(_passWord.text.trim(), _confirm.text.trim())) {
+                                } else if (!checkPass(_passWord.text.trim(),
+                                    _confirm.text.trim())) {
                                   showToastValidationConfirmPassword();
                                 } else {
-                                  signUp(_emailText.text.trim(),_passWord.text.trim(),_name.text.trim(),_phone.text.trim());
+                                  dk();
+                                  // signUp(_emailText.text.trim(),_passWord.text.trim(),_name.text.trim(),_phone.text.trim());
                                   if (createUserSuccess){
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Home()));
+                                            builder: (context) => Login()));
                                     Fluttertoast.showToast(
                                       msg: 'Tạo tài khoản thành công',
                                       toastLength: Toast.LENGTH_SHORT,

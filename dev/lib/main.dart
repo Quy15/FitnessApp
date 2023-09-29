@@ -4,6 +4,7 @@ import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/login.dart';
 import 'package:dev/layout/register.dart';
+import 'package:dev/layout/register_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ void main() async {
   await Firebase.initializeApp(
   );
 
+
   runApp(MyApp());
 }
 
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'HealthApp',
       routes: {
+        'register': (context) => RegisterPT(),
         'login': (context) => Login(),
         'home': (context) => Home(),   
         'homepage': (context) => HomePage(),

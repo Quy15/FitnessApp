@@ -3,6 +3,7 @@ import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/login.dart';
+import 'package:dev/layout/pt_page.dart';
 import 'package:flutter/material.dart';
 
 class MyAuth extends StatelessWidget {
@@ -28,14 +29,29 @@ class MyAuth extends StatelessWidget {
       });
     });
 
+    String trainer = " ";
+    FirebaseFirestore.instance
+        .collection("trainers")
+        .where("email", isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        id = doc.reference.id;       
+        trainer = "${doc['type']}";
+      });
+    });
+
+
     return FutureBuilder<DocumentSnapshot>(
       future: userref.doc(id).get(),
       builder: ((context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done){
-          if(isAnswered == true && userType != 'admin'){
+          if((isAnswered == true && userType == 'user')){
             return HomePage();
           }else if(isAnswered == true && userType == 'admin'){
             return AdminHomePage();
+          }else if (trainer == 'trainer'){
+            return PTPage();
           }else{
             return Home();
           }

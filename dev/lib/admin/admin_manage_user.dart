@@ -25,14 +25,15 @@ class AdminManageUserState extends State<AdminManageUser> {
     }
   }
 
-  Future approvePT(String mail, String pass, String uid) async {
+  Future<UserCredential> approvePT(String mail, String pass, String uid) async {
     try {
-      await FirebaseAuth.instance
+      UserCredential credential =  await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: mail, password: pass);
       final doc = FirebaseFirestore.instance
           .collection('trainers').doc(uid);
       doc.update({
         'active': true,
+        'id': credential.user!.uid,
       });
       Navigator.of(context).pop();
       Navigator.of(context)
@@ -40,16 +41,19 @@ class AdminManageUserState extends State<AdminManageUser> {
       Fluttertoast.showToast(
         msg: 'Tài khoản PT đã được tạo',
       );
+      return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         Fluttertoast.showToast(
           msg: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
         );
       }
+      throw Exception(e.code);
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
       );
+      throw Exception(e);
     }
   }
 
