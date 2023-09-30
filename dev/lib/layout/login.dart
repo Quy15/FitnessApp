@@ -43,7 +43,7 @@ class LoginState extends State<Login> {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
       String? userType = await getTypeByEmailUser(email);
-      String? trainer = await getTypeByEmailTrainer(email);
+      String? trainerType = await getTypeByEmailTrainer(email);
       if (userType == admin) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
@@ -54,7 +54,7 @@ class LoginState extends State<Login> {
             .push(MaterialPageRoute(builder: (context) => HomePage()));
         clearTextField();
       }
-      if (trainer == trainer) {
+      if (trainerType == trainer) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => TrainerHomePage()));
         clearTextField();
