@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/Trainer/trainer_homepage.dart';
 import 'package:dev/auth.dart';
 import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
@@ -40,14 +41,21 @@ class LoginState extends State<Login> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
-      String? userType = await getTypeByEmail(email);
+      String? userType = await getTypeByEmailUser(email);
+      String? trainer = await getTypeByEmailTrainer(email);
       if (userType == admin) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
         clearTextField();
-      } else if (userType == user || userType == "") {
+      }
+      if (userType == user) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => HomePage()));
+        clearTextField();
+      }
+      if (trainer == trainer) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => TrainerHomePage()));
         clearTextField();
       }
       Fluttertoast.showToast(
@@ -72,7 +80,7 @@ class LoginState extends State<Login> {
     }
   }
 
-  Future<String?> getTypeByEmail(String email) async {
+  Future<String?> getTypeByEmailUser(String email) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('users')
@@ -89,6 +97,22 @@ class LoginState extends State<Login> {
     }
   }
 
+  Future<String?> getTypeByEmailTrainer(String email) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('trainers')
+          .where('email', isEqualTo: email)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs[0]['type'] as String?;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      print('Lỗi khi truy vấn Firestore: $e');
+      return null;
+    }
+  }
   Future<void> resetPassword(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);

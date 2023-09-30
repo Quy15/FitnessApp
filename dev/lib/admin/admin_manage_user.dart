@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class AdminManageUser extends StatefulWidget {
   const AdminManageUser({super.key});
@@ -26,15 +27,32 @@ class AdminManageUserState extends State<AdminManageUser> {
   }
 
   Future<UserCredential> approvePT(String mail, String pass, String uid) async {
+    final Email send_email = Email(
+      body: 'Cảm ơn bạn đã đến với HealthFit,\n\n'
+          'Dưới đây là tài khoản và mật khẩu của bạn để đăng nhập vào ứng dụng.'
+          ' Nếu bạn cần hướng dẫn hoặc có câu hỏi thì đừng ngần ngại liên hệ để'
+          ' được hỗ trợ.\n\n'
+          'Thông tin tài khoản:\n'
+          'Tài khoản: ' + mail+'\n'
+          'Mật khẩu: HealthFitPt@123\n\n'
+          'Chúc bạn một ngày tốt lành,\n'
+          'HealthFit Team' ,
+      subject: 'Chào mừng bạn đến với HealthFit',
+      recipients: [mail],
+      attachmentPaths: [],
+      isHTML: false,
+    );
     try {
-      UserCredential credential =  await FirebaseAuth.instance
+      await FlutterEmailSender.send(send_email);
+
+      UserCredential credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: mail, password: pass);
-      final doc = FirebaseFirestore.instance
-          .collection('trainers').doc(uid);
+      final doc = FirebaseFirestore.instance.collection('trainers').doc(uid);
       doc.update({
         'active': true,
         'id': credential.user!.uid,
       });
+
       Navigator.of(context).pop();
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => AdminManageUser()));
@@ -98,13 +116,15 @@ class AdminManageUserState extends State<AdminManageUser> {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Duyệt danh sách PT đăng ký"),
-        backgroundColor: Colors.deepPurpleAccent,     
+        backgroundColor: Colors.deepPurpleAccent,
       ),
+      backgroundColor: Colors.grey[300],
       body: FutureBuilder<List<QueryDocumentSnapshot>>(
         future: getInactiveTrainers(),
         builder: (context, snapshot) {
@@ -113,7 +133,17 @@ class AdminManageUserState extends State<AdminManageUser> {
           } else if (snapshot.hasError) {
             return Text('Lỗi: ${snapshot.error}');
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('Hiện tại chưa có PT đăng ký.');
+            return Center(
+              child: Text(
+                'Hiện tại chưa có PT đăng ký.',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurpleAccent,
+                    fontStyle: FontStyle.italic,
+                ),
+              ),
+            );
           } else {
             // Hiển thị danh sách trainers đăng ký
             return ListView.builder(
@@ -130,21 +160,19 @@ class AdminManageUserState extends State<AdminManageUser> {
 
                 return ListTile(
                   title: Container(
-                    height: 120,
-                    width: 100,
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.all(12.0),
+                    height: 130,
+                    width: 150,
+                    // margin: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment
-                          .spaceBetween, // Để đặt hai biểu tượng hai bên
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .start, // Canh chỉnh văn bản theo chiều dọc
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(children: [
                               Text("Tên: "),
@@ -155,16 +183,18 @@ class AdminManageUserState extends State<AdminManageUser> {
                               Text(experience),
                             ]),
                             Row(children: [
-                              Text("Email: "),
-                              Text(email),
+                              Text("Ngày sinh: "),
+                              Text("${dob.day}/${dob.month}/${dob.year}"),
                             ]),
                             Row(children: [
                               Text("Số điện thoại: "),
                               Text(mobile),
                             ]),
                             Row(children: [
-                              Text("Ngày sinh: "),
-                              Text("${dob.day}/${dob.month}/${dob.year}"),
+                              Text("Email: "),
+                            ]),
+                            Row(children: [
+                              Text(email),
                             ]),
                           ],
                         ),
@@ -176,12 +206,12 @@ class AdminManageUserState extends State<AdminManageUser> {
                                 color: Colors.green,
                               ),
                               onPressed: () {
-                                approvePT(email, "User@123", uid);
+                                approvePT(email, "HealthFitPt@123", uid);
                               },
                             ),
-                            SizedBox(
-                              width: 15,
-                            ),
+                            // SizedBox(
+                            //   width: 25,
+                            // ),
                             IconButton(
                               onPressed: () {
                                 showAlertDialogDelete(context, uid);

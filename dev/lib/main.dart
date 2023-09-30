@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'Trainer/trainer_homepage.dart';
 import 'admin/admin_manage_user.dart';
 
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
         'homepage': (context) => HomePage(),
         'admin_homepage': (context) => AdminHomePage(),
         'admin_manage_user': (context) => AdminManageUser(),
+        'trainer_homepage': (context) => TrainerHomePage(),
       },
       home: AuthPage(),
     );
