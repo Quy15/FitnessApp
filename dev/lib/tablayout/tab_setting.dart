@@ -23,7 +23,7 @@ class  SettingState extends State <Setting> {
           padding: EdgeInsets.all(24),
           children: [
             SettingsGroup(
-              titleTextStyle: TextStyle(fontSize: 20),
+              titleTextStyle: TextStyle(fontSize: 25),
               title: "Cài đặt người dùng",
               children: <Widget>[
                 AccountPage(),
@@ -33,7 +33,7 @@ class  SettingState extends State <Setting> {
             ),
             const SizedBox(height: 32,),
             SettingsGroup(
-              titleTextStyle: TextStyle(fontSize: 20),
+              titleTextStyle: TextStyle(fontSize: 25),
               title: "Phản hồi",
               children: <Widget>[
                 buildBugFeed(),
