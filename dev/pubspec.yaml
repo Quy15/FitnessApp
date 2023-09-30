@@ -55,6 +55,10 @@ dependencies:
   zego_uikit_prebuilt_call: ^3.15.3
   zego_uikit_signaling_plugin: ^2.5.2
   flutterfire_cli: ^0.2.7
+  flutter_email_sender: ^5.0.2
+  http: ^0.13.6
+  flutter_native_splash: ^2.3.2
+  awesome_dialog: ^3.1.0
 
 dev_dependencies:
   flutter_test:
