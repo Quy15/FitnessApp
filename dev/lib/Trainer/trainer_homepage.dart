@@ -22,7 +22,7 @@ void signOut() async {
 
 class _TrainerHomePageState extends State<TrainerHomePage>{
 
-  final screen = [HomeTab(), Training(), Chat(), Setting()];
+  final screen = [Training(), Chat(), Setting()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _TrainerHomePageState extends State<TrainerHomePage>{
                 },
                 gap: 8,
                 tabs: [
-                  GButton(icon: Icons.home, text: 'Trang chủ',),
+                  // GButton(icon: Icons.home, text: 'Trang chủ',),
                   GButton(icon: Icons.calendar_month_outlined, text: 'Lịch tập',),
                   GButton(icon: Icons.chat_bubble, text: 'Chat',),
                   GButton(icon: Icons.settings, text: 'Cài đặt',),
