@@ -2,8 +2,8 @@ import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../Trainer/trainer_homepage.dart';
+
 
 class Training extends StatefulWidget {
   const Training({super.key});

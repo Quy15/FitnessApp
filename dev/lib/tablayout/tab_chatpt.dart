@@ -3,35 +3,48 @@ import 'package:dev/layout/chat_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Chat extends StatefulWidget {
-  const Chat({super.key});
+class ChatPT extends StatefulWidget {
+  const ChatPT({super.key});
 
   @override
-  State<Chat> createState() => _ChatState();
+  State<ChatPT> createState() => _ChatPTState();
 }
 
-class _ChatState extends State<Chat> {
-  final user = FirebaseAuth.instance.currentUser;
+class _ChatPTState extends State<ChatPT> {
+  final pt = FirebaseAuth.instance.currentUser;
   String id = " ";
-  String ptid = " ";
+  String uid = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
-        .collection("users")
+        .collection("trainers")
         .where("email", isEqualTo: email)
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          ptid = '${doc['id_pt']}';
+          id = '${doc['id']}';
           print(id);
+        });
+      });
+    });
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("id_pt", isEqualTo: id)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        setState(() {
+          uid = '${doc['id']}';
+          print(uid);
         });
       });
     });
   }
 
   @override
-  void initState() {
-    getUserByEmail(user!.email);
+  void initState(){
+    getUserByEmail(pt!.email);
     super.initState();
   }
 
@@ -51,7 +64,7 @@ class _ChatState extends State<Chat> {
 
   Widget _buildUserList() {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection("trainers").snapshots(),
+        stream: FirebaseFirestore.instance.collection("users").snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Text('Lỗi hệ thống');
@@ -72,7 +85,8 @@ class _ChatState extends State<Chat> {
   Widget _buildUserListItem(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
     //hiển thị toàn bộ user ngoại trừ người hiện tại
-    if (FirebaseAuth.instance.currentUser!.email != data['email'] && data['id'] == ptid) {
+    if (FirebaseAuth.instance.currentUser!.email != data['email'] &&
+        data['id_pt'] == id) {
       return ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Stack(alignment: Alignment.bottomRight, children: [

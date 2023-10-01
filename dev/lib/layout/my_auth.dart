@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/Trainer/trainer_homepage.dart';
 import 'package:dev/admin/admin_homepage.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
@@ -51,7 +52,7 @@ class MyAuth extends StatelessWidget {
           }else if(isAnswered == true && userType == 'admin'){
             return AdminHomePage();
           }else if (trainer == 'trainer'){
-            return PTPage();
+            return TrainerHomePage();
           }else{
             return Home();
           }

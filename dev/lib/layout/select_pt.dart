@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/pt_detail.dart';
 import 'package:dev/tablayout/get_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,19 @@ class ChoosePT extends StatefulWidget {
   State<ChoosePT> createState() => _ChoosePTState();
 }
 
+List<String> training_packages = [
+  'Gói ngày',
+  'Gói tuần',
+  'Gói tháng',
+  'Gói năm'
+];
+
 class _ChoosePTState extends State<ChoosePT> {
+  String _value = training_packages.first;
 
   final user = FirebaseAuth.instance.currentUser;
-   String id = " ";
-   String prequently = " ";
+  String id = " ";
+  String prequently = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -44,6 +53,7 @@ class _ChoosePTState extends State<ChoosePT> {
   }
 
   List<String> ptIDs = [];
+  List<String> ptNames = [];
   Future getPT() async {
     await FirebaseFirestore.instance
         .collection("trainers")
@@ -53,6 +63,7 @@ class _ChoosePTState extends State<ChoosePT> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         ptIDs.add(doc.reference.id);
+        ptNames.add('${doc['name']}');
       });
     });
   }
@@ -74,23 +85,26 @@ class _ChoosePTState extends State<ChoosePT> {
       body: FutureBuilder(
         future: getPT(),
         builder: (context, snapshot) {
-            return ListView.builder(
-              itemCount: ptIDs.length,
-              itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Container(
-                      height: 120,
-                      margin: EdgeInsets.all(8.0),
-                      padding: EdgeInsets.all(12.0),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: GetPT(ptID: ptIDs[index]),
-                    ),
-                  );
-              },
-            );
+          return ListView.builder(
+            itemCount: ptIDs.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Container(
+                  height: 120,
+                  margin: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(12.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: GetPT(ptID: ptIDs[index]),
+                ),
+                onTap: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => PTDetail(ptId: ptIDs[index],)));
+                },
+              );
+            },
+          );
         },
       ),
     );

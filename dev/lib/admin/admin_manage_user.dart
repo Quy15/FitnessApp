@@ -53,9 +53,9 @@ class AdminManageUserState extends State<AdminManageUser> {
         'id': credential.user!.uid,
       });
 
-      Navigator.of(context).pop();
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => AdminManageUser()));
+      // Navigator.of(context).pop();
+      // Navigator.of(context)
+      //     .push(MaterialPageRoute(builder: (context) => AdminManageUser()));
       Fluttertoast.showToast(
         msg: 'Tài khoản PT đã được tạo',
       );
