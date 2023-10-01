@@ -7,38 +7,43 @@ class GetPT extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    CollectionReference reference = FirebaseFirestore.instance.collection("trainers");
+    CollectionReference reference =
+        FirebaseFirestore.instance.collection("trainers");
 
     return FutureBuilder<DocumentSnapshot>(
-      future: reference.doc(ptID).get(),
-      builder: (context, snapshot){
-        if (snapshot.connectionState == ConnectionState.done){
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(children: [
-                            Text("Tên: "),
-                            Text(data['name']),
-                          ]),
-                          Row(children: [
-                            Text("Kinh nghiệm: "),
-                            Text(data['experience']),
-                          ]),
-                          Row(children: [
-                            Text("Email: "),
-                            Text(data['email']),
-                          ]),
-                          Row(children: [
-                            Text("Số điện thoại: "),
-                            Text(data['mobile']),
-                          ]),
-                        ],
-                      );
-        }else{
-          return Container();
-        }
-      });
+        future: reference.doc(ptID).get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Text(
+                    "Tên: ",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(data['name'], style: TextStyle(fontSize: 20)),
+                ]),
+                Row(children: [
+                  Text("Kinh nghiệm: ", style: TextStyle(fontSize: 20)),
+                  Text(data['experience'], style: TextStyle(fontSize: 20)),
+                ]),
+                Row(children: [
+                  Text("Email: ", style: TextStyle(fontSize: 20)),
+                  Text(data['email'], style: TextStyle(fontSize: 20)),
+                ]),
+                Row(children: [
+                  Text("Số điện thoại: ", style: TextStyle(fontSize: 20)),
+                  Text(data['mobile'], style: TextStyle(fontSize: 20)),
+                ]),
+              ],
+            );
+          } else {
+            return Text(
+                'Đang tải danh sách .... Sau 5 giây nếu không có danh sách bạn hãy thoát ra vào lại nhé !');
+          }
+        });
   }
 }

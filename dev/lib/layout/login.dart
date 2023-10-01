@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/Trainer/trainer_homepage.dart';
 import 'package:dev/auth.dart';
 import 'package:dev/admin/admin_homepage.dart';
+import 'package:dev/layout/auth_page.dart';
 import 'package:dev/layout/home.dart';
 import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/my_auth.dart';
@@ -150,11 +151,14 @@ class LoginState extends State<Login> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              Container(
-                padding: EdgeInsets.only(left: 50, top: 135, right: 35),
-                child: Text(
-                  'Đăng nhập hệ thống',
-                  style: TextStyle(color: Colors.black, fontSize: 33),
+              Padding(
+                padding: const EdgeInsets.only(top: 135, left: 120, right: 50),
+                child: Container(
+                  child: Text(
+                    'Đăng nhập hệ thống',
+                    style: TextStyle(color: Colors.black, fontSize: 33,),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
               SingleChildScrollView(
@@ -233,6 +237,7 @@ class LoginState extends State<Login> {
                               onPressed: () {
                                 signInWithEmailAndPassWord(
                                     _email.text.trim(), _pass.text.trim());
+                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => AuthPage()));
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),
