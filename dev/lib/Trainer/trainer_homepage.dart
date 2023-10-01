@@ -32,7 +32,7 @@ class _TrainerHomePageState extends State<TrainerHomePage>{
         bottomNavigationBar: Container(
           color: Colors.black,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: GNav(
                 backgroundColor: Colors.black,
                 activeColor: Colors.white,
@@ -47,7 +47,7 @@ class _TrainerHomePageState extends State<TrainerHomePage>{
                 gap: 8,
                 tabs: [
                   // GButton(icon: Icons.home, text: 'Trang chủ',),
-                  GButton(icon: Icons.calendar_month_outlined, text: 'Lịch tập',),
+                  GButton(icon: Icons.fact_check_sharp, text: 'Bài tập',),
                   GButton(icon: Icons.chat_bubble, text: 'Chat',),
                   GButton(icon: Icons.settings, text: 'Cài đặt',),
                 ]
