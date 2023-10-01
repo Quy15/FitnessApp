@@ -42,23 +42,6 @@ class LoginState extends State<Login> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
-      String? userType = await getTypeByEmailUser(email);
-      String? trainer = await getTypeByEmailTrainer(email);
-      if (userType == admin) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => AdminHomePage()));
-        clearTextField();
-      }
-      if (userType == user) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => HomePage()));
-        clearTextField();
-      }
-      if (trainer == trainer) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => TrainerHomePage()));
-        clearTextField();
-      }
       Fluttertoast.showToast(
         msg: 'Đăng nhập thành công',
       );

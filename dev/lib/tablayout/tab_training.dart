@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
+// import 'package:awesome_dialog/awesome_dialog.dart';
 
 class Training extends StatefulWidget {
   const Training({super.key});
@@ -181,7 +181,7 @@ class TrainingState extends State<Training> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: const Text('Lưu'),
+                      child: const Text('Lưu', style: TextStyle(fontSize: 20),),
                     ),
                   ],
                 ),

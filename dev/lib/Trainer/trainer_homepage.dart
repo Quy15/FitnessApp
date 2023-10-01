@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/login.dart';
-import 'package:dev/tablayout/tab_call.dart';
 import 'package:dev/tablayout/tab_chat.dart';
+import 'package:dev/tablayout/tab_chatpt.dart';
 import 'package:dev/tablayout/tab_home.dart';
+import 'package:dev/tablayout/tab_homept.dart';
 import 'package:dev/tablayout/tab_setting.dart';
 import 'package:dev/tablayout/tab_training.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +23,7 @@ void signOut() async {
 
 class _TrainerHomePageState extends State<TrainerHomePage>{
 
-  final screen = [HomeTab(), Training(), Chat(), Setting()];
+  final screen = [HomePT(), Training(), ChatPT(), Setting()];
   int index = 0;
   @override
   Widget build(BuildContext context) {

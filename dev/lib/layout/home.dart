@@ -75,7 +75,11 @@ class _HomeState extends State<Home> {
     await FirebaseFirestore.instance
         .collection("trainning_purpose")
         .doc(id)
-        .set({'purpose': selectedValue, 'prequently': _prequentcy.text.trim(),'user_id': id});
+        .set({
+      'purpose': selectedValue,
+      'prequently': _prequentcy.text.trim(),
+      'user_id': id
+    });
   }
 
   Widget radioWidget() => Column(
@@ -170,7 +174,8 @@ class _HomeState extends State<Home> {
                               height: 35,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 50, right: 50),
+                              padding:
+                                  const EdgeInsets.only(left: 50, right: 50),
                               child: TextField(
                                 controller: _weight,
                                 textAlign: TextAlign.left,
@@ -190,7 +195,8 @@ class _HomeState extends State<Home> {
                               height: 40,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 50, right: 50),
+                              padding:
+                                  const EdgeInsets.only(left: 50, right: 50),
                               child: TextField(
                                 controller: _height,
                                 textAlign: TextAlign.left,
@@ -206,9 +212,12 @@ class _HomeState extends State<Home> {
                                     alignLabelWithHint: true),
                               ),
                             ),
-                            SizedBox(height: 40,),
+                            SizedBox(
+                              height: 40,
+                            ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 50, right: 50),
+                              padding:
+                                  const EdgeInsets.only(left: 50, right: 50),
                               child: TextField(
                                 controller: _age,
                                 textAlign: TextAlign.left,
@@ -237,8 +246,8 @@ class _HomeState extends State<Home> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 5, vertical: 4),
                                 decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: Colors.black, width: 3),
+                                    border: Border.all(
+                                        color: Colors.black, width: 3),
                                     borderRadius: BorderRadius.circular(10)),
                                 child: DropdownButton(
                                     items: _items.map((String item) {
@@ -385,13 +394,17 @@ class _HomeState extends State<Home> {
                                   maxLines: 10,
                                   decoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors.deepPurpleAccent),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    hintText: 'Tình trạng sức khỏe của bạn ....',
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    hintText:
+                                        'Tình trạng sức khỏe của bạn ....',
                                     fillColor: Colors.grey[200],
                                     filled: true,
                                   ),
@@ -439,13 +452,17 @@ class _HomeState extends State<Home> {
                                   controller: _prequentcy,
                                   decoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.black),
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Colors.deepPurpleAccent),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    hintText: 'Tình trạng sức khỏe của bạn ....',
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    hintText:
+                                        'Tình trạng sức khỏe của bạn ....',
                                     fillColor: Colors.grey[200],
                                     filled: true,
                                   ),
@@ -479,7 +496,8 @@ class _HomeState extends State<Home> {
                             width: size.width * 0.8,
                             child: Text(
                               'HOÀN TẤT',
-                              style: TextStyle(fontSize: 25, color: Colors.white),
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),

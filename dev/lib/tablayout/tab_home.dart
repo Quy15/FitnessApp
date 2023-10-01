@@ -15,7 +15,6 @@ class _HomeTab extends State<HomeTab> {
 
   String id = " ";
   String uname = " ";
-  String prequently = " ";
   String weight = " ";
   String height = " ";
   double bmi = 0;
@@ -42,19 +41,6 @@ class _HomeTab extends State<HomeTab> {
         });
       });
     });
-
-    await FirebaseFirestore.instance
-        .collection("trainning_purpose")
-        .where("user_id", isEqualTo: id)
-        .get()
-        .then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        setState(() {
-          this.prequently = '${doc['prequently']}';
-        });
-        print(prequently);
-      });
-    });
   }
 
   String bmiCal() {
@@ -63,33 +49,8 @@ class _HomeTab extends State<HomeTab> {
     return BMI;
   }
 
-  // Future getPurpose() async {
-  //   await FirebaseFirestore.instance
-  //       .collection("trainning_purpose")
-  //       .where("user_id", isEqualTo: id)
-  //       .get()
-  //       .then((QuerySnapshot snapshot) {
-  //     snapshot.docs.forEach((DocumentSnapshot doc) {
-  //       this.prequently = '${doc['purpose']}';
-  //       print(prequently);
-  //     });
-  //   });
-  // }
 
-  List<String> ptIDs = [];
-
-  Future getPT() async {
-    await FirebaseFirestore.instance
-        .collection("trainers")
-        .where("active", isEqualTo: true)
-        .where("teachdays", isEqualTo: prequently)
-        .get()
-        .then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        ptIDs.add(doc.reference.id);
-      });
-    });
-  }
+ 
 
   Future<List<QueryDocumentSnapshot>> getPTByPurpose() async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -104,8 +65,6 @@ class _HomeTab extends State<HomeTab> {
   @override
   void initState() {
     getUserByEmail(user?.email);
-    getPT();
-    // getPurpose();
     super.initState();
   }
 

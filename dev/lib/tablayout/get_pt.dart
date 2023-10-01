@@ -13,7 +13,10 @@ class GetPT extends StatelessWidget {
     return FutureBuilder<DocumentSnapshot>(
         future: reference.doc(ptID).get(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (!snapshot.hasData) {
+              return Text(
+                'Đang tải danh sách .... Sau 5 giây nếu không có danh sách bạn hãy thoát ra vào lại nhé !');
+          } else {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
             return Column(
@@ -40,9 +43,6 @@ class GetPT extends StatelessWidget {
                 ]),
               ],
             );
-          } else {
-            return Text(
-                'Đang tải danh sách .... Sau 5 giây nếu không có danh sách bạn hãy thoát ra vào lại nhé !');
           }
         });
   }
