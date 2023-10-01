@@ -10,6 +10,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
+import '../tablayout/tab_homept.dart';
+
 class TrainerHomePage extends StatefulWidget {
   const TrainerHomePage({super.key});
 
@@ -23,6 +25,7 @@ void signOut() async {
 
 class _TrainerHomePageState extends State<TrainerHomePage>{
 
+
   final screen = [HomePT(), Training(), ChatPT(), Setting()];
   int index = 0;
   @override
@@ -31,15 +34,15 @@ class _TrainerHomePageState extends State<TrainerHomePage>{
       child: Scaffold(
         body: screen[index],
         bottomNavigationBar: Container(
-          color: Colors.black,
+          color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
             child: GNav(
-                backgroundColor: Colors.black,
-                activeColor: Colors.white,
-                color: Colors.white,
+                backgroundColor: Colors.white,
+                activeColor: Colors.black,
+                color: Colors.grey,
                 padding: EdgeInsets.all(16),
-                tabBackgroundColor: Colors.grey.shade800,
+                tabBackgroundColor: Colors.grey.shade300,
                 onTabChange: (index) {
                   setState(() {
                     this.index = index;
@@ -48,7 +51,7 @@ class _TrainerHomePageState extends State<TrainerHomePage>{
                 gap: 8,
                 tabs: [
                   GButton(icon: Icons.home, text: 'Trang chủ',),
-                  GButton(icon: Icons.calendar_month_outlined, text: 'Lịch tập',),
+                  GButton(icon: Icons.fact_check_sharp, text: 'Bài tập',),
                   GButton(icon: Icons.chat_bubble, text: 'Chat',),
                   GButton(icon: Icons.settings, text: 'Cài đặt',),
                 ]

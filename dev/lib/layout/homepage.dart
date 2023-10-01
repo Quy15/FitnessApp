@@ -32,11 +32,11 @@ class _HomePageState extends State<HomePage>{
            child: Padding(
              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
              child: GNav(
-              backgroundColor: Colors.black,
-              activeColor: Colors.white,
-              color: Colors.white,
+              backgroundColor: Colors.white,
+              activeColor: Colors.black,
+              color: Colors.black,
               padding: EdgeInsets.all(16),
-              tabBackgroundColor: Colors.grey.shade800,
+              tabBackgroundColor: Colors.grey.shade300,
               onTabChange: (index) {
                 setState(() {
                   this.index = index;
