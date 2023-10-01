@@ -84,11 +84,11 @@ class TrainingState extends State<Training> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Tạo lịch tập"),
+          title: Text("Tạo bài tập"),
           backgroundColor: Colors.black,
           automaticallyImplyLeading: false,
         ),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.grey[100],
         body: Container(
             height: 700,
             child: Column(children: [
@@ -99,7 +99,7 @@ class TrainingState extends State<Training> {
                   closedBuilder: (context, action) => Container(
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.grey[300],
+                      color: Colors.grey[100],
                       // borderRadius: BorderRadius.circular(20),
                     ),
                     child: Icon(
@@ -293,7 +293,7 @@ class TrainingState extends State<Training> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 130), // Đặt lề bên trái
+                  padding: EdgeInsets.only(left: 130),
                   child: Text(
                     "Bài tập",
                     style: TextStyle(
@@ -376,7 +376,7 @@ Widget buildExerciseListItem(String name, String set, String rep, String level,
       width: 150,
       padding: EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Row(

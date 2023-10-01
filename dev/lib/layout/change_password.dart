@@ -121,16 +121,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ),
               ),
               SizedBox(height: 20,),
-              MaterialButton(
-                onPressed: (){
+              ElevatedButton(
+                onPressed: () {
                   changePassword(
-                    user!.email, _oldPass.text.trim(), _newPass.text.trim()
+                      user!.email, _oldPass.text.trim(), _newPass.text.trim()
                   );
                   print('Pass change');
                 },
-                child: Text('Xác nhận'),
-                color: const Color.fromARGB(255, 111, 236, 115),
-              )
+                child: Text('Đổi mật khẩu'),
+              ),
             ],
           ),
         ),
