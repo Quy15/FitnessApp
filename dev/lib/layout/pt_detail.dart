@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/select_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +16,7 @@ class PTDetail extends StatefulWidget {
 class _PTDetailState extends State<PTDetail> {
   static const value = <String>['Gói ngày', 'Gói tuần', 'Gói tháng', 'Gói năm'];
   String selectedValue = value.first;
+  List<String> packages = [];
   final selectedColor = Colors.green;
   final unselectedColor = Colors.grey;
   final user = FirebaseAuth.instance.currentUser;
@@ -27,7 +30,7 @@ class _PTDetailState extends State<PTDetail> {
               value,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            onChanged: (value) => setState(() => this.selectedValue = value!),
+            onChanged: (value) => setState(() => selectedValue = value!),
           );
         }).toList(),
       );
@@ -45,16 +48,54 @@ class _PTDetailState extends State<PTDetail> {
     });
   }
 
+  String ptid = " ";
+  final ref = FirebaseFirestore.instance.collection("trainers");
+  getPT() async{
+    DocumentSnapshot snapshot = await ref.doc(widget.ptId).get();
+    print(snapshot['id']);
+  }
+
+  String pid = " ";
+  // String pname = " ";
+  // Future getPackage() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("packages")
+  //       .get()
+  //       .then((QuerySnapshot snapshot) {
+  //     snapshot.docs.forEach((DocumentSnapshot doc) {
+  //       pid = doc.reference.id;
+  //       this.pname = '${doc['name']}';
+  //       packages.add(pid);
+  //       print(pid);
+  //     });
+  //   });
+  // }
+
+  void setPackage(String select){
+    if(select.contains("Gói ngày")){
+      this.pid = 'K4Bexi49noYdkVeC8LYh';
+    }else if (select.contains("Gói tuần")){
+      this.pid = 'YrlUmjr09llwXJa6WC9A';
+    }else if (select.contains("Gói tháng")){
+      this.pid = 'd9lk43SUWnQ71qYc6sXK';
+    }else if (select.contains("Gói năm")){
+      this.pid = 'hWoTvATC7u1vGzolZZnt';
+    }
+  }
+
   Future savePT() async {
+    setPackage(selectedValue);
     await FirebaseFirestore.instance
         .collection("users")
         .doc(id)
-        .update({'id_pt': widget.ptId, 'packages': selectedValue});
+        .update({'id_pt': ptid, 'id_package': pid});
   }
 
   @override
   void initState() {
     getUserByEmail(user?.email);
+    getPT();
+    // getPackage();
     super.initState();
   }
 
@@ -218,6 +259,7 @@ class _PTDetailState extends State<PTDetail> {
                                           borderRadius:
                                               BorderRadius.circular(10))),
                                   onPressed: () {
+                                    
                                     savePT();
                                     Fluttertoast.showToast(
                                       msg: 'Đăng ký thành công',

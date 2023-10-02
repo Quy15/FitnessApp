@@ -59,6 +59,9 @@ class RegisterState extends State<Register> {
         'password': password,
         'isAnswer': false,
         'type': "user",
+        'id_pt': "",
+        'id_package':"",
+        'call_id': "",
       });
       return userCredential;
     } on FirebaseAuthException catch (e) {
