@@ -39,7 +39,24 @@ class _ChatPageState extends State<ChatPage> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          id = doc.reference.id;
+          id = '${doc['id']}';
+          this.name = '${doc['email']}';
+          print(id);
+          print(name);
+        });
+      });
+    });
+  }
+
+  Future getPT(String? email) async {
+    await FirebaseFirestore.instance
+        .collection("trainers")
+        .where("email", isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        setState(() {
+          id = '${doc['id']}';
           this.name = '${doc['email']}';
           print(id);
           print(name);
@@ -51,6 +68,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState(){
     getUserByEmail(_firebaseAuth.currentUser?.email);
+    getPT(_firebaseAuth.currentUser?.email);
     super.initState();
   }
 
@@ -63,7 +81,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           IconButton(
             onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: "1", username: name)));
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: "1", username: id)));
             },
             icon: Icon(Icons.video_call))
         ],
