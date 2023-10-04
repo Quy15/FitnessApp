@@ -1,12 +1,19 @@
+
+
+
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/chat_bubble.dart';
 import 'package:dev/services/chat_services.dart';
 import 'package:dev/tablayout/tab_call.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key, required this.receiveUserName, required this.receiveUID});
+  const ChatPage(
+      {super.key, required this.receiveUserName, required this.receiveUID});
 
   final String receiveUserName;
   final String receiveUID;
@@ -22,15 +29,16 @@ class _ChatPageState extends State<ChatPage> {
 
   void sendMess() async {
     //Chỉ gửi khi có nhập tin nhắn
-    if(_messageController.text.isNotEmpty)
-    {
-      await _chatServices.sendMessage(widget.receiveUID, _messageController.text);
+    if (_messageController.text.isNotEmpty) {
+      await _chatServices.sendMessage(
+          widget.receiveUID, _messageController.text);
       _messageController.clear();
     }
   }
 
   String name = " ";
   String id = " ";
+  String call_name = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -39,8 +47,9 @@ class _ChatPageState extends State<ChatPage> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          id = '${doc['id']}';
+          id = '${doc['call_id']}';
           this.name = '${doc['email']}';
+          this.call_name = '${doc['call_name']}';
           print(id);
           print(name);
         });
@@ -56,7 +65,7 @@ class _ChatPageState extends State<ChatPage> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          id = '${doc['id']}';
+          id = '${doc['call_id']}';
           this.name = '${doc['email']}';
           print(id);
           print(name);
@@ -66,7 +75,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   @override
-  void initState(){
+  void initState() {
     getUserByEmail(_firebaseAuth.currentUser?.email);
     getPT(_firebaseAuth.currentUser?.email);
     super.initState();
@@ -77,13 +86,13 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.receiveUserName),
-        centerTitle: true,  
+        centerTitle: true,
         actions: [
           IconButton(
-            onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: "1", username: id)));
-            },
-            icon: Icon(Icons.video_call))
+              onPressed: () {
+                onJoin();
+              },
+              icon: Icon(Icons.video_call))
         ],
       ),
       body: Column(
@@ -92,7 +101,7 @@ class _ChatPageState extends State<ChatPage> {
             //danh sach tin nhắn
             child: _buildMessageList(),
           ),
-            
+
           //Người dùng nhập tin nhắn
           _builtUserInput()
         ],
@@ -100,40 +109,69 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  //message list
-  Widget _buildMessageList(){
-    return StreamBuilder(stream: _chatServices.getMessages(widget.receiveUID, _firebaseAuth.currentUser!.uid), 
-    builder: (context, snapshot) {
-      if(snapshot.hasError){
-        return Text('Error: ' + snapshot.error.toString()); 
-      }
-
-      if (snapshot.connectionState == ConnectionState.waiting){
-        return const Text("Loading ....");
-      }
-
-      return ListView(
-        children: snapshot.data!.docs.map((document) => _buildMessageItems(document)).toList(),
-      );
-    },);
+  Future<void> onJoin() async {
+    if(id.isNotEmpty){
+      // await _handleCameraAndMic(Permission.camera);
+      // await _handleCameraAndMic(Permission.microphone);
+      await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CallView(
+                          callID: id,
+                          username: name,
+                          userid: call_name,
+                        )));
+    }
   }
 
+  // Future<void> _handleCameraAndMic(Permission permission) async {
+  //   final status = await permission.request();
+  //   log(status.toString());
+  // }
+
+  //message list
+  Widget _buildMessageList() {
+    return StreamBuilder(
+      stream: _chatServices.getMessages(
+          widget.receiveUID, _firebaseAuth.currentUser!.uid),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text('Error: ' + snapshot.error.toString());
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text("Loading ....");
+        }
+
+        return ListView(
+          children: snapshot.data!.docs
+              .map((document) => _buildMessageItems(document))
+              .toList(),
+        );
+      },
+    );
+  }
 
   //messgae items
   Widget _buildMessageItems(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-    var align = (data['senderId'] == _firebaseAuth.currentUser!.uid) ? Alignment.centerRight : Alignment.centerLeft;
+    var align = (data['senderId'] == _firebaseAuth.currentUser!.uid)
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
 
     return Container(
       alignment: align,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
-          crossAxisAlignment: (data['senderId'] == _firebaseAuth.currentUser!.uid) ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment:
+              (data['senderId'] == _firebaseAuth.currentUser!.uid)
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
           children: [
             Text(data['senderEmail']),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             ChatBubble(message: data['message'])
           ],
         ),
@@ -141,9 +179,8 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-
   //user input
-  Widget _builtUserInput(){
+  Widget _builtUserInput() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 7),
       child: Row(
@@ -153,20 +190,24 @@ class _ChatPageState extends State<ChatPage> {
               controller: _messageController,
               obscureText: false,
               decoration: InputDecoration(
-               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.black),
-                borderRadius: BorderRadius.circular(10)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(10)),
                 focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                color: Colors.deepPurpleAccent),
-                borderRadius: BorderRadius.circular(10)),
+                    borderSide: BorderSide(color: Colors.deepPurpleAccent),
+                    borderRadius: BorderRadius.circular(10)),
                 hintText: 'Nhập tin nhắn ....',
                 fillColor: Colors.grey[200],
                 filled: true,
-             ),
+              ),
             ),
           ),
-          IconButton(onPressed: sendMess, icon: Icon(Icons.arrow_upward, size: 40,))
+          IconButton(
+              onPressed: sendMess,
+              icon: Icon(
+                Icons.arrow_upward,
+                size: 40,
+              ))
         ],
       ),
     );
