@@ -51,7 +51,7 @@ class MyAuth extends StatelessWidget {
             return HomePage();
           }else if(isAnswered == true && userType == 'admin'){
             return AdminHomePage();
-          }else if (trainer == 'trainer'){
+          }else if (isAnswered == true || trainer == 'trainer'){
             return TrainerHomePage();
           }else{
             return Home();
