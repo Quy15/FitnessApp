@@ -244,8 +244,8 @@ class RegisterState extends State<RegisterPT> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue, // Màu nền của nút
-                            onPrimary: Colors.white, // Màu văn bản trên nút
+                            primary: Colors.blue,
+                            onPrimary: Colors.white,
                             padding: EdgeInsets.only(
                                 right: 90, left: 90, top: 15, bottom: 15),
                             shape: RoundedRectangleBorder(
@@ -256,7 +256,7 @@ class RegisterState extends State<RegisterPT> {
                         ),
                       ),
                       SizedBox(
-                        height: 48,
+                        height: 30,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -279,7 +279,10 @@ class RegisterState extends State<RegisterPT> {
                                     color: Colors.blue),
                               ))
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
                     ],
                   ),
                 ),

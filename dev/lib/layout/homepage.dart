@@ -28,13 +28,13 @@ class _HomePageState extends State<HomePage>{
       child: Scaffold(
         body: screen[index],
          bottomNavigationBar: Container(
-          color: Colors.black,
+          color: Colors.white,
            child: Padding(
              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
              child: GNav(
               backgroundColor: Colors.white,
               activeColor: Colors.black,
-              color: Colors.black,
+              color: Colors.grey,
               padding: EdgeInsets.all(16),
               tabBackgroundColor: Colors.grey.shade300,
               onTabChange: (index) {

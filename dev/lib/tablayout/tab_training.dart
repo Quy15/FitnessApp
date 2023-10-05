@@ -84,8 +84,10 @@ class TrainingState extends State<Training> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Tạo bài tập"),
-          backgroundColor: Colors.black,
+          title: Text("Tạo bài tập",
+          style: TextStyle(color: Colors.black),
+        ),
+          backgroundColor: Colors.grey[300],
           automaticallyImplyLeading: false,
         ),
         backgroundColor: Colors.grey[100],
