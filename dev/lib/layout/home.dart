@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
                                     border: myInputBorder(),
                                     enabledBorder: myInputBorder(),
                                     focusedBorder: myInputBorder(),
-                                    labelText: 'Chiều cao (theo centimet)',
+                                    labelText: 'Chiều cao (theo met)',
                                     labelStyle:
                                         TextStyle(color: Colors.deepPurple),
                                     hintStyle:
@@ -462,7 +462,7 @@ class _HomeState extends State<Home> {
                                         borderRadius:
                                             BorderRadius.circular(10)),
                                     hintText:
-                                        'Tình trạng sức khỏe của bạn ....',
+                                        'Ví dụ: 3 buoi, 5 buoi, vvv ....',
                                     fillColor: Colors.grey[200],
                                     filled: true,
                                   ),

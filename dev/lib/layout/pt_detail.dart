@@ -52,6 +52,7 @@ class _PTDetailState extends State<PTDetail> {
   final ref = FirebaseFirestore.instance.collection("trainers");
   getPT() async{
     DocumentSnapshot snapshot = await ref.doc(widget.ptId).get();
+    ptid = snapshot['id'];
     print(snapshot['id']);
   }
 
@@ -83,13 +84,34 @@ class _PTDetailState extends State<PTDetail> {
     }
   }
 
+
   Future savePT() async {
+    List<String> callId = [id, ptid];
+    callId.sort();
+    String cid = callId.join("_");
+    String cname = callId.join("_");    
     setPackage(selectedValue);
     await FirebaseFirestore.instance
         .collection("users")
         .doc(id)
-        .update({'id_pt': ptid, 'id_package': pid});
+        .update({'id_pt': ptid, 'id_package': pid, 'call_id': cid, 'call_name': cname});
   }
+
+  Future saveUser() async {
+    List<String> callId = [id, ptid];
+    callId.sort();
+    String cid = callId.join("_");
+    String cname = callId.join("_");    
+    setPackage(selectedValue);
+    await FirebaseFirestore.instance
+        .collection("trainers")
+        .doc(widget.ptId)
+        .update({'call_id': cid, 'call_name': cname});
+  }
+
+
+  
+
 
   @override
   void initState() {
@@ -261,6 +283,7 @@ class _PTDetailState extends State<PTDetail> {
                                   onPressed: () {
                                     
                                     savePT();
+                                    saveUser();
                                     Fluttertoast.showToast(
                                       msg: 'Đăng ký thành công',
                                       toastLength: Toast.LENGTH_SHORT,
