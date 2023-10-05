@@ -5,6 +5,7 @@ import 'package:dev/tablayout/tab_chatpt.dart';
 import 'package:dev/tablayout/tab_home.dart';
 import 'package:dev/tablayout/tab_homept.dart';
 import 'package:dev/tablayout/tab_setting.dart';
+import 'package:dev/tablayout/tab_setting_pt.dart';
 import 'package:dev/tablayout/tab_training.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ void signOut() async {
 class _TrainerHomePageState extends State<TrainerHomePage>{
 
 
-  final screen = [HomePT(), Training(), ChatPT(), Setting()];
+  final screen = [HomePT(), Training(), ChatPT(), SettingPT()];
   int index = 0;
   @override
   Widget build(BuildContext context) {

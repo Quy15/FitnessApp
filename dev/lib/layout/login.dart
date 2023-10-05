@@ -135,11 +135,11 @@ class LoginState extends State<Login> {
           body: Stack(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 135, left: 120, right: 50),
+                padding: const EdgeInsets.only(top: 135, left: 55, right: 50),
                 child: Container(
                   child: Text(
                     'Đăng nhập hệ thống',
-                    style: TextStyle(color: Colors.black, fontSize: 33,),
+                    style: TextStyle(color: Colors.black, fontSize: 30,),
                     textAlign: TextAlign.center,
                   ),
                 ),
