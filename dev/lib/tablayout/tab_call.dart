@@ -72,7 +72,6 @@ class _CallState extends State<Call> {
               ElevatedButton(
                 child: Text('Alooooooooooo'),
                 onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => CallView(callID: callID, username: name)));
                 },
               ),
               actionButton(false),
@@ -99,8 +98,9 @@ class _CallState extends State<Call> {
 }
 
 class CallView extends StatelessWidget {
-  const CallView({super.key, required this.callID ,required this.username});
+  const CallView({super.key, required this.callID ,required this.username, required this.userid});
 
+  final String userid;
   final String username;
   final String callID;
 

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/select_pt.dart';
+import 'package:dev/push_noti/push_noti.dart';
 import 'package:dev/tablayout/get_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,9 +49,6 @@ class _HomeTab extends State<HomeTab> {
     BMI = bmi.toStringAsFixed(2);
     return BMI;
   }
-
-
- 
 
   Future<List<QueryDocumentSnapshot>> getPTByPurpose() async {
     QuerySnapshot snapshot = await FirebaseFirestore.instance
@@ -182,31 +180,70 @@ class _HomeTab extends State<HomeTab> {
             SizedBox(
               height: 40,
             ),
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.12),
-                          blurRadius: 5.0,
-                          spreadRadius: 1.1,
-                        ),
-                      ]),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => ChoosePT()));
-                      },
-                      child: Icon(Icons.list_alt_outlined)
-                      ), 
+                Column(
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ]),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ChoosePT()));
+                          },
+                          child: Icon(Icons.list_alt_outlined)),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'PT được đề xuất',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 5,),
-                Text('PT được đề xuất', style: TextStyle(fontSize: 20),),
+                Column(
+                  children: [
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ]),
+                      child: ElevatedButton(
+                          onPressed: () async{
+                           
+                          },
+                          child: Icon(Icons.list_alt_outlined)),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'PT được đề xuất',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                ),
               ],
             )
           ],
