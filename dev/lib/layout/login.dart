@@ -11,6 +11,7 @@ import 'package:dev/layout/my_auth.dart';
 import 'package:dev/layout/pt_page.dart';
 import 'package:dev/layout/register.dart';
 import 'package:dev/layout/register_pt.dart';
+import 'package:dev/layout/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,11 +41,29 @@ class LoginState extends State<Login> {
 
   Future<void> signInWithEmailAndPassWord(String email, String pw) async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: pw);
-      Fluttertoast.showToast(
-        msg: 'Đăng nhập thành công',
-      );
+      if (_email.text == "" && _pass.text == "" ||
+          _email.text == "" && _pass.text != "" ||
+          _email.text != "" && _pass.text == "") {
+            Fluttertoast.showToast(
+          msg: 'Không được để trống',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 2,
+          textColor: Colors.white,
+          backgroundColor: const Color.fromARGB(255, 80, 182, 133),
+          fontSize: 20,
+        );
+      } else if (_email.text != "" && _pass.text != ""){
+        // showDialog(context: context, builder: (context){
+        //   return Center(child: CircularProgressIndicator(),);
+        // });
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: pw);
+        Fluttertoast.showToast(
+          msg: 'Đăng nhập thành công',
+        );
+        // Navigator.of(context).pop();
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         Fluttertoast.showToast(
@@ -97,6 +116,7 @@ class LoginState extends State<Login> {
       return null;
     }
   }
+
   Future<void> resetPassword(String email) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
@@ -116,8 +136,6 @@ class LoginState extends State<Login> {
       }
     }
   }
-
- 
 
   void clearTextField() {
     _email.clear();
@@ -139,7 +157,10 @@ class LoginState extends State<Login> {
                 child: Container(
                   child: Text(
                     'Đăng nhập hệ thống',
-                    style: TextStyle(color: Colors.black, fontSize: 33,),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 33,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -220,7 +241,8 @@ class LoginState extends State<Login> {
                               onPressed: () {
                                 signInWithEmailAndPassWord(
                                     _email.text.trim(), _pass.text.trim());
-                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => AuthPage()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Splash()));
                               },
                               icon: Icon(Icons.arrow_forward),
                             ),
