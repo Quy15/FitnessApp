@@ -5,6 +5,7 @@ import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/login.dart';
 import 'package:dev/layout/register.dart';
 import 'package:dev/layout/register_pt.dart';
+import 'package:dev/layout/splash.dart';
 import 'package:dev/push_noti/push_noti.dart';
 import 'package:dev/tablayout/tab_chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'HealthApp',
       routes: {
+        'splash': (context) => Splash(),
         'register': (context) => RegisterPT(),
         'login': (context) => Login(),
         'home': (context) => Home(),   
