@@ -37,23 +37,22 @@ class _HomePTState extends State<HomePT> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.sizeOf(context);
+    final size = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          height: 700,
+        body: SingleChildScrollView(
           child: Column(children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Container(
-                  width: size.width,
+                  width: size,
                   height: 150,
                   margin: EdgeInsets.all(5),
                   padding: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white, width: 2),
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.lightBlue[100],
+                    color: Colors.white,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.12),
@@ -62,75 +61,72 @@ class _HomePTState extends State<HomePT> {
                       ),
                     ],
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Xin chào, " + ptname,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Xin chào, " + ptname,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey,
                             ),
-                            Container(
-                              padding: EdgeInsets.all(6),
+                            child: Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.grey,
+                                color: Colors.white,
                               ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
-                                child: Icon(
-                                  Icons.person,
-                                  size: 60,
-                                  color: Colors.black,
-                                ),
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.black,
                               ),
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 5),
-                        Text(
-                          "Hãy kiểm tra các hoạt động của bạn",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Hãy kiểm tra các hoạt động của bạn",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   )),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Container(
-                      width: 170,
-                      height: 150,
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.lightBlue[100],
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.12),
-                            blurRadius: 5.0,
-                            spreadRadius: 1.1,
-                          ),
-                        ],
-                      ),
-                      child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  children: [
+                    Container(
+                        width: 170,
+                        height: 150,
+                        margin: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.lightBlue[100],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
+                            ),
+                          ],
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -174,74 +170,73 @@ class _HomePTState extends State<HomePT> {
                               ),
                             ),
                           ],
-                        ),
-                      )),
-                  Container(
-                      width: 170,
-                      height: 150,
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 2),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.lightBlue[100],
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.12),
-                            blurRadius: 5.0,
-                            spreadRadius: 1.1,
-                          ),
-                        ],
-                      ),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Text(
-                                //   "Xin chào, " + ptname,
-                                //   style: TextStyle(
-                                //       color: Colors.black,
-                                //       fontSize: 20,
-                                //       fontWeight: FontWeight.bold),
-                                // ),
-                                Container(
-                                  padding: EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.grey,
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.white,
-                                    ),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 60,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              "",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 16,
-                              ),
+                        )),
+                    Container(
+                        width: 170,
+                        height: 150,
+                        margin: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 2),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.lightBlue[100],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.12),
+                              blurRadius: 5.0,
+                              spreadRadius: 1.1,
                             ),
                           ],
                         ),
-                      )),
-                ],
-              )
-            ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // Text(
+                                  //   "Xin chào, " + ptname,
+                                  //   style: TextStyle(
+                                  //       color: Colors.black,
+                                  //       fontSize: 20,
+                                  //       fontWeight: FontWeight.bold),
+                                  // ),
+                                  Container(
+                                    padding: EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey,
+                                    ),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.white,
+                                      ),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 60,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ],
+                )),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
@@ -252,7 +247,9 @@ class _HomePTState extends State<HomePT> {
                 ),
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             ListTile(
               title: Container(
                 height: 130,

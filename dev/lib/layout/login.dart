@@ -59,9 +59,9 @@ class LoginState extends State<Login> {
         // });
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: pw);
-        Fluttertoast.showToast(
-          msg: 'Đăng nhập thành công',
-        );
+        // Fluttertoast.showToast(
+        //   msg: 'Đăng nhập thành công',
+        // );
         // Navigator.of(context).pop();
       }
     } on FirebaseAuthException catch (e) {

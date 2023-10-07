@@ -16,7 +16,7 @@ class _SplashState extends State<Splash> {
   void initState(){
     super.initState();
 
-    Future.delayed(Duration(seconds: 5)).then((value){
+    Future.delayed(const Duration(milliseconds: 3500)).then((value){
       Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (context) => AuthPage()));
     });
   }
@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white12.withOpacity(0.5),
+      backgroundColor: Colors.lightBlueAccent[200],
       body: Center(
         child: SizedBox(
           height: 200,
@@ -33,12 +33,12 @@ class _SplashState extends State<Splash> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SpinKitCircle(
-                color: Colors.green,
+                color: Colors.white,
                 size: 50.0,
               ),
               SizedBox(height: 10,),
               Text("Đang xử lý đăng nhập", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500
-              , color: Colors.green),)
+              , color: Colors.white),)
             ],
           ),
         ),
