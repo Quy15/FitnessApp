@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage>{
            child: Padding(
              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
              child: GNav(
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.white,
               activeColor: Colors.black,
               color: Colors.grey,
               padding: EdgeInsets.all(16),
