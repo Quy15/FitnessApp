@@ -24,6 +24,7 @@ class _ChoosePTState extends State<ChoosePT> {
   final user = FirebaseAuth.instance.currentUser;
   String id = " ";
   String prequently = " ";
+  String ptId = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -33,7 +34,9 @@ class _ChoosePTState extends State<ChoosePT> {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
           id = '${doc['id']}';
+          this.ptId = '${doc['id_pt']}';
           print(id);
+          print(ptId);
         });
       });
     });
@@ -88,21 +91,30 @@ class _ChoosePTState extends State<ChoosePT> {
           return ListView.builder(
             itemCount: ptIDs.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Container(
-                  height: 120,
-                  margin: EdgeInsets.all(8.0),
-                  padding: EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(8.0),
+              if (ptId != " ") {
+                return Container(
+
+                );
+              } else {
+                return ListTile(
+                  title: Container(
+                    height: 120,
+                    margin: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: GetPT(ptID: ptIDs[index]),
                   ),
-                  child: GetPT(ptID: ptIDs[index]),
-                ),
-                onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => PTDetail(ptId: ptIDs[index],)));
-                },
-              );
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PTDetail(
+                              ptId: ptIDs[index],
+                            )));
+                  },
+                );
+              }
             },
           );
         },

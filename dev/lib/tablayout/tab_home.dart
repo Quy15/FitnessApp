@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/schedue.dart';
 import 'package:dev/layout/select_pt.dart';
 import 'package:dev/push_noti/push_noti.dart';
 import 'package:dev/tablayout/get_pt.dart';
@@ -18,9 +19,14 @@ class _HomeTab extends State<HomeTab> {
   String uname = " ";
   String weight = " ";
   String height = " ";
+  String tuoi = " ";
+  String zIndex = " ";
   double bmi = 0;
   double cn = 0;
   double ccao = 0;
+  double bmr = 0;
+  double age = 0;
+  String BMR = " ";
   String BMI = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
@@ -34,11 +40,16 @@ class _HomeTab extends State<HomeTab> {
           this.uname = '${doc['name']}';
           this.weight = '${doc['weight(kg)']}';
           this.height = '${doc['height(cm)']}';
+          this.tuoi = '${doc['age']}';
+          this.zIndex = '${doc['z-index']}';
           this.cn = double.parse(this.weight);
           this.ccao = double.parse(this.height);
+          this.age = double.parse(this.tuoi);
           print(id);
           print(weight);
           print(height);
+          print(tuoi);
+          print(zIndex);
         });
       });
     });
@@ -48,6 +59,34 @@ class _HomeTab extends State<HomeTab> {
     bmi = cn / (ccao * ccao);
     BMI = bmi.toStringAsFixed(2);
     return BMI;
+  }
+
+  String bmrCal() {
+    bmr = 10 * cn + 6.25 * (ccao * 100) - 5 * age + 5;
+    BMR = bmr.toStringAsFixed(0);
+    return BMR;
+  }
+
+  double tdee = 0;
+  String TDEE = " ";
+  String tdeeCal() {
+    if (zIndex == "Ít vận động") {
+      tdee = bmr * 1.2;
+    }
+    if (zIndex == 'Vận động nhẹ') {
+      tdee = bmr * 1.375;
+    }
+    if (zIndex == 'Vận động vừa') {
+      tdee = bmr * 1.55;
+    }
+    if (zIndex == 'Vận động nhiều') {
+      tdee = bmr * 1.725;
+    }
+    if (zIndex == 'Vận động nặng') {
+      tdee = bmr* 1.9;
+    }
+    TDEE = tdee.toStringAsFixed(0);
+    return TDEE;
   }
 
   Future<List<QueryDocumentSnapshot>> getPTByPurpose() async {
@@ -155,17 +194,29 @@ class _HomeTab extends State<HomeTab> {
                   SizedBox(
                     height: 60,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text("BMI: " + bmiCal(),
-                        style: TextStyle(fontSize: 25)),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text("BMI: " + bmiCal(),
+                            style: TextStyle(fontSize: 25)),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: Text("BMR: " + bmrCal(),
+                            style: TextStyle(fontSize: 25)),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 60,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: Text("TDEE: ", style: TextStyle(fontSize: 25)),
+                    child: Text("TDEE: " + tdeeCal(), style: TextStyle(fontSize: 25)),
                   )
                 ],
               ),
@@ -181,7 +232,6 @@ class _HomeTab extends State<HomeTab> {
               height: 40,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
                   children: [
@@ -214,6 +264,9 @@ class _HomeTab extends State<HomeTab> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  width: 20,
+                ),
                 Column(
                   children: [
                     Container(
@@ -230,16 +283,17 @@ class _HomeTab extends State<HomeTab> {
                             ),
                           ]),
                       child: ElevatedButton(
-                          onPressed: () async{
-                           
+                          onPressed: () async {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Schedue()));
                           },
-                          child: Icon(Icons.list_alt_outlined)),
+                          child: Icon(Icons.calendar_today)),
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     Text(
-                      'PT được đề xuất',
+                      'Lịch tập',
                       style: TextStyle(fontSize: 20),
                     ),
                   ],
