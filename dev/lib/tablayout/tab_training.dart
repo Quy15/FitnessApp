@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../Trainer/trainer_homepage.dart';
@@ -13,6 +14,7 @@ class Training extends StatefulWidget {
 }
 
 List<String> equipments = [
+  'Không',
   'Tạ đơn',
   'Dây',
   'Thảm trải',
@@ -23,14 +25,16 @@ List<String> muscleGroup = [
   'Lưng',
   'Tay sau',
   'Tay trước',
+  'Bụng',
+  'Vai',
 ];
 List<String> level = [
   'Dễ',
   'Trung bình',
   'Nâng cao',
 ];
-
 class TrainingState extends State<Training> {
+  final user = FirebaseAuth.instance.currentUser;
   String dropdownEquipment = equipments.first;
   String dropdownMuscleGroup = muscleGroup.first;
   String dropdownLevel = level.first;
@@ -44,9 +48,9 @@ class TrainingState extends State<Training> {
 
   @override
   void dispose() {
-    _name.dispose();
-    _set.dispose();
-    _rep.dispose();
+    // _name.dispose();
+    // _set.dispose();
+    // _rep.dispose();
     // _level.dispose();
     // _muscleGroup.dispose();
     // _equipment.dispose();
@@ -64,6 +68,7 @@ class TrainingState extends State<Training> {
       'muscleGroup': muscleGroup,
       'equipment': equipment,
       'id': docEx.id,
+      'pt_uid': '${user?.uid}',
     };
     await docEx.set(data);
   }
@@ -76,8 +81,15 @@ class TrainingState extends State<Training> {
 
   void showToastValidation() {
     Fluttertoast.showToast(
-      msg: 'Vui lòng nhập đầy đủ thông tin',
+      msg: 'Vui lòng nhập đầy đủ thông tin ',
     );
+  }
+
+
+  @override
+  void initState() {
+    // getUserByEmail(user?.email);
+    super.initState();
   }
 
   @override
@@ -310,111 +322,113 @@ class TrainingState extends State<Training> {
                   shrinkWrap: true,
                   children: <Widget>[
                     Container(
-                      height: 550,
+                      height: 640,
                       child: buildExerciseList(),
                     ),
                   ])
             ])));
   }
-}
-
-Future<List<QueryDocumentSnapshot>> getExersise() async {
-  try {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('exersise').get();
-    return querySnapshot.docs;
-  } catch (e) {
-    print('Lỗi khi truy vấn Firestore: $e');
-    return [];
+  Future<List<QueryDocumentSnapshot>> getExersise() async {
+    try {
+      QuerySnapshot querySnapshot =
+      await FirebaseFirestore.instance.collection('exersise')
+          .where('pt_uid', isEqualTo: '${user?.uid}')
+          .get();
+      return querySnapshot.docs;
+    } catch (e) {
+      print('Lỗi khi truy vấn Firestore: $e');
+      return [];
+    }
   }
-}
 
-Widget buildExerciseList() {
-  return FutureBuilder<List<QueryDocumentSnapshot>>(
-    future: getExersise(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text('Lỗi: ${snapshot.error}');
-      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Center(
-          child: Text(
-            'Hiện tại chưa có bài tập',
-            style: TextStyle(
-              fontSize: 20.0,
-              color: Colors.black,
+  Widget buildExerciseList() {
+    return FutureBuilder<List<QueryDocumentSnapshot>>(
+      future: getExersise(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Lỗi: ${snapshot.error}');
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Text(
+              'Hiện tại chưa có bài tập',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black,
+              ),
             ),
-          ),
-        );
-      } else {
-        return ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: snapshot.data!.length,
-          itemBuilder: (context, index) {
-            var exersise = snapshot.data![index];
-            var name = exersise['name'] as String;
-            var set = exersise['set'] as String;
-            var rep = exersise['rep'] as String;
-            var level = exersise['level'] as String;
-            var muscle = exersise['muscleGroup'] as String;
-            var equipment = exersise['equipment'] as String;
+          );
+        } else {
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              var exersise = snapshot.data![index];
+              var name = exersise['name'] as String;
+              var set = exersise['set'] as String;
+              var rep = exersise['rep'] as String;
+              var level = exersise['level'] as String;
+              var muscle = exersise['muscleGroup'] as String;
+              var equipment = exersise['equipment'] as String;
 
-            return buildExerciseListItem(
-                name, set, rep, level, muscle, equipment);
-          },
-        );
-      }
-    },
-  );
-}
+              return buildExerciseListItem(
+                  name, set, rep, level, muscle, equipment);
+            },
+          );
+        }
+      },
+    );
+  }
 
-Widget buildExerciseListItem(String name, String set, String rep, String level,
-    String muscle, String equipment) {
-  return ListTile(
-    title: Container(
-      height: 130,
-      width: 150,
-      padding: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
+  Widget buildExerciseListItem(String name, String set, String rep, String level,
+      String muscle, String equipment) {
+    return ListTile(
+      title: Container(
+        height: 130,
+        width: 150,
+        padding: EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Text("Tên: "),
+                  Text(name),
+                ]),
+                Row(children: [
+                  Text("Set: "),
+                  Text(set),
+                ]),
+                Row(children: [
+                  Text("Rep: "),
+                  Text(rep),
+                ]),
+                Row(children: [
+                  Text("Level: "),
+                  Text(level),
+                ]),
+                Row(children: [
+                  Text("Nhóm cơ: "),
+                  Text(muscle),
+                ]),
+                Row(children: [
+                  Text("Dụng cụ: "),
+                  Text(equipment),
+                ]),
+              ],
+            ),
+          ],
+        ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                Text("Tên: "),
-                Text(name),
-              ]),
-              Row(children: [
-                Text("Set: "),
-                Text(set),
-              ]),
-              Row(children: [
-                Text("Rep: "),
-                Text(rep),
-              ]),
-              Row(children: [
-                Text("Level: "),
-                Text(level),
-              ]),
-              Row(children: [
-                Text("Nhóm cơ: "),
-                Text(muscle),
-              ]),
-              Row(children: [
-                Text("Dụng cụ: "),
-                Text(equipment),
-              ]),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
+    );
+  }
+  }
+
