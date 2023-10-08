@@ -13,8 +13,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'Trainer/trainer_create_exersise_calendar.dart';
 import 'Trainer/trainer_homepage.dart';
 import 'admin/admin_manage_user.dart';
+import 'admin/admin_pt_user_manage.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -46,7 +48,10 @@ class MyApp extends StatelessWidget {
         'admin_homepage': (context) => AdminHomePage(),
         'admin_manage_user': (context) => AdminManageUser(),
         'trainer_homepage': (context) => TrainerHomePage(),
-        'tab_chat': (context) => Chat()
+        'tab_chat': (context) => Chat(),
+        'admin_pt_user_manage': (context) => AdminPTUserManagePage(),
+        'trainer_create_exersise_calendar': (context) => TrainerCreateExersiseCalendarPage(uid: '',),
+
       },
       home: AuthPage(),
     );

@@ -28,6 +28,8 @@ class RegisterState extends State<Register> {
   final _phone = TextEditingController();
   final _confirm = TextEditingController();
 
+  Timestamp now = Timestamp.fromDate(DateTime.now());
+
   String? ma;
   bool hidePass = true;
   bool createUserSuccess = true;
@@ -61,6 +63,7 @@ class RegisterState extends State<Register> {
         'type': "user",
         'id_pt': "",
         'id_package':"",
+        'created_date':now,
       });
       return userCredential;
     } on FirebaseAuthException catch (e) {
