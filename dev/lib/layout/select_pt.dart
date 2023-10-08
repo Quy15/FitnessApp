@@ -66,6 +66,7 @@ class _ChoosePTState extends State<ChoosePT> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         ptIDs.add(doc.reference.id);
+        print(ptIDs);
         ptNames.add('${doc['name']}');
       });
     });
@@ -81,43 +82,39 @@ class _ChoosePTState extends State<ChoosePT> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('DANH SÁCH PT'),
-      ),
-      body: FutureBuilder(
-        future: getPT(),
-        builder: (context, snapshot) {
-          return ListView.builder(
-            itemCount: ptIDs.length,
-            itemBuilder: (context, index) {
-              if (ptId != " ") {
-                return Container(
-
-                );
-              } else {
-                return ListTile(
-                  title: Container(
-                    height: 120,
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.all(12.0),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8.0),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('DANH SÁCH PT'),
+        ),
+        body: FutureBuilder(
+          future: getPT(),
+          builder: (context, snapshot) {
+            return ListView.builder(
+              itemCount: ptIDs.length,
+              itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Container(
+                      height: 120,
+                      margin: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: GetPT(ptID: ptIDs[index]),
                     ),
-                    child: GetPT(ptID: ptIDs[index]),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PTDetail(
-                              ptId: ptIDs[index],
-                            )));
-                  },
-                );
-              }
-            },
-          );
-        },
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => PTDetail(
+                                ptId: ptIDs[index],
+                              )));
+                    },
+                  );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -6,6 +6,10 @@ import 'package:dev/tablayout/get_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+String TDEE = " ";
+double tdee = 0;
+double cn = 0;
+
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
 
@@ -22,7 +26,6 @@ class _HomeTab extends State<HomeTab> {
   String tuoi = " ";
   String zIndex = " ";
   double bmi = 0;
-  double cn = 0;
   double ccao = 0;
   double bmr = 0;
   double age = 0;
@@ -42,7 +45,7 @@ class _HomeTab extends State<HomeTab> {
           this.height = '${doc['height(cm)']}';
           this.tuoi = '${doc['age']}';
           this.zIndex = '${doc['z-index']}';
-          this.cn = double.parse(this.weight);
+          cn = double.parse(this.weight);
           this.ccao = double.parse(this.height);
           this.age = double.parse(this.tuoi);
           print(id);
@@ -62,13 +65,13 @@ class _HomeTab extends State<HomeTab> {
   }
 
   String bmrCal() {
-    bmr = 10 * cn + 6.25 * (ccao * 100) - 5 * age + 5;
+    bmr = 10 * cn + (6.25 * (ccao * 100)) - (5 * age) + 5;
     BMR = bmr.toStringAsFixed(0);
     return BMR;
   }
 
-  double tdee = 0;
-  String TDEE = " ";
+  // double tdee = 0;
+  // String TDEE = " ";
   String tdeeCal() {
     if (zIndex == "Ít vận động") {
       tdee = bmr * 1.2;
@@ -110,199 +113,201 @@ class _HomeTab extends State<HomeTab> {
     Size size = MediaQuery.sizeOf(context);
     return SafeArea(
       child: Scaffold(
-          body: Padding(
-        padding: const EdgeInsets.only(left: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Xin chào " + uname,
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-                  ),
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.person,
-                      size: 40,
+          body: SingleChildScrollView(
+            child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Xin chào " + uname,
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
-                    radius: 30,
-                  )
-                ],
+                    CircleAvatar(
+                      child: Icon(
+                        Icons.person,
+                        size: 40,
+                      ),
+                      radius: 30,
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              'Chỉ số cơ thể',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: 500,
-              height: 280,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 183, 164, 238)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Chỉ số cơ thể',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                width: 500,
+                height: 280,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color.fromARGB(255, 183, 164, 238)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text(
+                                "Cân nặng: ",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                            ),
+                            Text(
+                              weight + " kg",
+                              style: TextStyle(fontSize: 25),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Chiều cao: ",
+                              style: TextStyle(fontSize: 25),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: Text(
+                                height + " m",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 60,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text("BMI: " + bmiCal(),
+                              style: TextStyle(fontSize: 25)),
+                        ),
+                        SizedBox(
+                          width: 50,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text("BMR: " + bmrCal(),
+                              style: TextStyle(fontSize: 25)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 60,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text("TDEE: " + tdeeCal(), style: TextStyle(fontSize: 25)),
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Tiện ích dành cho bạn',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Row(
                 children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                              "Cân nặng: ",
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ),
-                          Text(
-                            weight + " kg",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Chiều cao: ",
-                            style: TextStyle(fontSize: 25),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: Text(
-                              height + " m",
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 60,
-                  ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text("BMI: " + bmiCal(),
-                            style: TextStyle(fontSize: 25)),
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 5.0,
+                                spreadRadius: 1.1,
+                              ),
+                            ]),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ChoosePT()));
+                            },
+                            child: Icon(Icons.list_alt_outlined)),
                       ),
                       SizedBox(
-                        width: 50,
+                        height: 5,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text("BMR: " + bmrCal(),
-                            style: TextStyle(fontSize: 25)),
+                      Text(
+                        'PT được đề xuất',
+                        style: TextStyle(fontSize: 20),
                       ),
                     ],
                   ),
                   SizedBox(
-                    height: 60,
+                    width: 20,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text("TDEE: " + tdeeCal(), style: TextStyle(fontSize: 25)),
-                  )
+                  Column(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 5.0,
+                                spreadRadius: 1.1,
+                              ),
+                            ]),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => Schedue()));
+                            },
+                            child: Icon(Icons.calendar_today)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Lịch tập',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
                 ],
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              'Tiện ích dành cho bạn',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Row(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 5.0,
-                              spreadRadius: 1.1,
-                            ),
-                          ]),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ChoosePT()));
-                          },
-                          child: Icon(Icons.list_alt_outlined)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'PT được đề xuất',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
+              )
+            ],
+                  ),
                 ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 5.0,
-                              spreadRadius: 1.1,
-                            ),
-                          ]),
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => Schedue()));
-                          },
-                          child: Icon(Icons.calendar_today)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'Lịch tập',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-              ],
-            )
-          ],
-        ),
-      )),
+          )),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/homepage.dart';
 import 'package:dev/layout/select_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -97,17 +98,17 @@ class _PTDetailState extends State<PTDetail> {
         .update({'id_pt': ptid, 'id_package': pid, 'call_id': cid, 'call_name': cname});
   }
 
-  Future saveUser() async {
-    List<String> callId = [id, ptid];
-    callId.sort();
-    String cid = callId.join("_");
-    String cname = callId.join("_");    
-    setPackage(selectedValue);
-    await FirebaseFirestore.instance
-        .collection("trainers")
-        .doc(widget.ptId)
-        .update({'call_id': cid, 'call_name': cname});
-  }
+  // Future saveUser() async {
+  //   List<String> callId = [id, ptid];
+  //   callId.sort();
+  //   String cid = callId.join("_");
+  //   String cname = callId.join("_");    
+  //   setPackage(selectedValue);
+  //   await FirebaseFirestore.instance
+  //       .collection("trainers")
+  //       .doc(widget.ptId)
+  //       .update({'call_id': cid, 'call_name': cname});
+  // }
 
 
   
@@ -281,9 +282,9 @@ class _PTDetailState extends State<PTDetail> {
                                           borderRadius:
                                               BorderRadius.circular(10))),
                                   onPressed: () {
-                                    
                                     savePT();
-                                    saveUser();
+                                    // saveUser();
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
                                     Fluttertoast.showToast(
                                       msg: 'Đăng ký thành công',
                                       toastLength: Toast.LENGTH_SHORT,

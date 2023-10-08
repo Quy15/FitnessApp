@@ -1,6 +1,3 @@
-
-
-
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -57,6 +54,23 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  Future getUserByName() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("name", isEqualTo: widget.receiveUserName)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        setState(() {
+          id = '${doc['call_id']}';
+          this.call_name = '${doc['call_name']}';
+          this.name = '${doc['email']}';
+          print(id);
+        });
+      });
+    });
+  }
+
   Future getPT(String? email) async {
     await FirebaseFirestore.instance
         .collection("trainers")
@@ -65,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         setState(() {
-          id = '${doc['call_id']}';
+          // id = '${doc['call_id']}';
           this.name = '${doc['email']}';
           print(id);
           print(name);
@@ -78,6 +92,7 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     getUserByEmail(_firebaseAuth.currentUser?.email);
     getPT(_firebaseAuth.currentUser?.email);
+    getUserByName();
     super.initState();
   }
 
@@ -110,15 +125,15 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> onJoin() async {
-    if(id.isNotEmpty){
+    if (id.isNotEmpty) {
       // await _handleCameraAndMic(Permission.camera);
       // await _handleCameraAndMic(Permission.microphone);
       await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CallView(
-                          callID: id,
-                          username: name,
-                          userid: call_name,
-                        )));
+          builder: (context) => CallView(
+                callID: id,
+                username: name,
+                userid: call_name,
+              )));
     }
   }
 

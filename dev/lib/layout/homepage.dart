@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/login.dart';
+import 'package:dev/tablayout/macro.dart';
 import 'package:dev/tablayout/tab_chat.dart';
 import 'package:dev/tablayout/tab_home.dart';
 import 'package:dev/tablayout/tab_setting.dart';
@@ -23,7 +24,7 @@ void signOut() async {
 
 class _HomePageState extends State<HomePage>{
   
-  final screen = [HomeTab(), Chat(), Setting()];
+  final screen = [HomeTab(), Chat(), Macro() ,Setting()];
   int index = 0;
 
   @override
@@ -31,19 +32,18 @@ class _HomePageState extends State<HomePage>{
 
     // final message = ModalRoute.of(context)!.settings.arguments as RemoteMessage;
 
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         body: screen[index],
          bottomNavigationBar: Container(
-          color: Colors.white,
+          color: Colors.black,
            child: Padding(
              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
              child: GNav(
               backgroundColor: Colors.black,
-              activeColor: Colors.black,
-              color: Colors.grey,
+              activeColor: Colors.white,
+              color: Colors.white,
               padding: EdgeInsets.all(16),
-              tabBackgroundColor: Colors.grey.shade300,
+              tabBackgroundColor: Colors.grey.shade800,
               onTabChange: (index) {
                 setState(() {
                   this.index = index;
@@ -53,12 +53,12 @@ class _HomePageState extends State<HomePage>{
               tabs: [
                 GButton(icon: Icons.home, text: 'Trang chủ',),
                 GButton(icon: Icons.chat_bubble, text: 'Chat',),
+                GButton(icon: Icons.restaurant_menu, text: 'Macro',),
                 GButton(icon: Icons.settings, text: 'Cài đặt',),
               ]
               ),
            ),
          ),
-        ),
-    );
+        );
   }
 }

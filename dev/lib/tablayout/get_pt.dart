@@ -1,20 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class GetPT extends StatelessWidget {
+class GetPT extends StatefulWidget {
   final String ptID;
   const GetPT({super.key, required this.ptID});
 
+  _GetPTState createState() => _GetPTState();
+}
+
+class _GetPTState extends State<GetPT> {
   @override
   Widget build(BuildContext context) {
     CollectionReference reference =
         FirebaseFirestore.instance.collection("trainers");
 
     return FutureBuilder<DocumentSnapshot>(
-        future: reference.doc(ptID).get(),
+        future: reference.doc(widget.ptID).get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-              return Text(
+            return Text(
                 'Đang tải danh sách .... Sau 5 giây nếu không có danh sách bạn hãy thoát ra vào lại nhé !');
           } else {
             Map<String, dynamic> data =
