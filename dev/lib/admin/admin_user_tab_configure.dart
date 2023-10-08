@@ -16,7 +16,7 @@ class AdminUserTabConfigureState extends State<AdminUserTabConfigure> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Quản lý tài khoản người dùng"),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.lightBlueAccent[200],
       ),
       backgroundColor: Colors.grey[100],
     );

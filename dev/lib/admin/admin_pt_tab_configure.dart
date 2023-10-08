@@ -16,7 +16,7 @@ class AdminPTTabConfigureState extends State<AdminPTTabConfigure> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Quản lý tài khoản PT"),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.lightBlueAccent[200],
       ),
       backgroundColor: Colors.grey[100],
     );

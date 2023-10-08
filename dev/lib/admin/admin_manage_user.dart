@@ -122,7 +122,7 @@ class AdminManageUserState extends State<AdminManageUser> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Duyệt danh sách PT đăng ký"),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.lightBlueAccent[200],
       ),
       backgroundColor: Colors.grey[300],
       body: FutureBuilder<List<QueryDocumentSnapshot>>(

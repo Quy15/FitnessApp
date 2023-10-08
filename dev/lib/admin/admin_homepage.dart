@@ -53,7 +53,7 @@ class _AdminHomePageState extends State<AdminHomePage>{
     return Scaffold(
       appBar: AppBar(
         title: Text("Trang quản trị"),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: Colors.lightBlueAccent[200],
         actions: [
           IconButton(
               onPressed: () {
@@ -99,8 +99,6 @@ class _AdminHomePageState extends State<AdminHomePage>{
           } else if (snapshot.hasError) {
             return Text('Lỗi: ${snapshot.error}');
           } else {
-            Map<String, int> userCountByMonth = {};
-
             // Xử lý dữ liệu để tính toán số lượng người dùng theo tháng
             snapshot.data!.forEach((doc) {
               String createdDate = (doc['created_date']).toDate().toString();
