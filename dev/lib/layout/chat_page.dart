@@ -64,7 +64,6 @@ class _ChatPageState extends State<ChatPage> {
         setState(() {
           id = '${doc['call_id']}';
           this.call_name = '${doc['call_name']}';
-          this.name = '${doc['email']}';
           print(id);
         });
       });
@@ -81,7 +80,6 @@ class _ChatPageState extends State<ChatPage> {
         setState(() {
           // id = '${doc['call_id']}';
           this.name = '${doc['email']}';
-          print(id);
           print(name);
         });
       });
