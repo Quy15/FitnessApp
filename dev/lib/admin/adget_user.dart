@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class GetPT extends StatefulWidget {
-  final String ptID;
-  const GetPT({super.key, required this.ptID});
+class AdminGetUser extends StatefulWidget {
+  final String uID;
+  const AdminGetUser({super.key, required this.uID});
 
-  _GetPTState createState() => _GetPTState();
+  _AdminGetUserState createState() => _AdminGetUserState();
 }
 
-class _GetPTState extends State<GetPT> {
+class _AdminGetUserState extends State<AdminGetUser> {
   @override
   Widget build(BuildContext context) {
     CollectionReference reference =
-        FirebaseFirestore.instance.collection("trainers");
+        FirebaseFirestore.instance.collection("users");
 
     return FutureBuilder<DocumentSnapshot>(
-        future: reference.doc(widget.ptID).get(),
+        future: reference.doc(widget.uID).get(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Text(
-                'Đang tải danh sách ....');
+                'Đang tải danh sách .... ');
           } else {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
@@ -34,16 +34,12 @@ class _GetPTState extends State<GetPT> {
                   Text(data['name'], style: TextStyle(fontSize: 20)),
                 ]),
                 Row(children: [
-                  Text("Kinh nghiệm: ", style: TextStyle(fontSize: 20)),
-                  Text(data['experience'], style: TextStyle(fontSize: 20)),
-                ]),
-                Row(children: [
                   Text("Email: ", style: TextStyle(fontSize: 20)),
                   Text(data['email'], style: TextStyle(fontSize: 20)),
                 ]),
                 Row(children: [
                   Text("Số điện thoại: ", style: TextStyle(fontSize: 20)),
-                  Text(data['mobile'], style: TextStyle(fontSize: 20)),
+                  Text(data['phone'], style: TextStyle(fontSize: 20)),
                 ]),
               ],
             );

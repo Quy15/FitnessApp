@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class GetPT extends StatefulWidget {
+class AdminGetPT extends StatefulWidget {
   final String ptID;
-  const GetPT({super.key, required this.ptID});
+  const AdminGetPT({super.key, required this.ptID});
 
-  _GetPTState createState() => _GetPTState();
+  _AdminGetPTState createState() => _AdminGetPTState();
 }
 
-class _GetPTState extends State<GetPT> {
+class _AdminGetPTState extends State<AdminGetPT> {
   @override
   Widget build(BuildContext context) {
     CollectionReference reference =
@@ -19,7 +19,7 @@ class _GetPTState extends State<GetPT> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Text(
-                'Đang tải danh sách ....');
+                'Đang tải danh sách .... ');
           } else {
             Map<String, dynamic> data =
                 snapshot.data!.data() as Map<String, dynamic>;
