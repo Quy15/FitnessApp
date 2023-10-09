@@ -20,7 +20,7 @@ void signOut() async {
 class _AdminPTUserManagePageState extends State<AdminPTUserManagePage>{
 
 
-  final screen = [AdminPTTabConfigure(), AdminUserTabConfigure()];
+  final screen = [AdminUserTabConfigure(),AdminPTTabConfigure()];
   int index = 0;
   @override
   Widget build(BuildContext context) {
@@ -44,8 +44,8 @@ class _AdminPTUserManagePageState extends State<AdminPTUserManagePage>{
                 },
                 gap: 8,
                 tabs: [
-                  GButton(icon: Icons.home, text: 'Quản lý tài khoản người dùng',),
-                  GButton(icon: Icons.fact_check_sharp, text: 'Quản lý tài khoản PT',),
+                  GButton(icon: Icons.manage_accounts, text: 'Quản lý tài khoản người dùng',),
+                  GButton(icon: Icons.manage_accounts, text: 'Quản lý tài khoản PT',),
                 ]
             ),
           ),
