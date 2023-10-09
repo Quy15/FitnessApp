@@ -197,10 +197,10 @@ class RegisterState extends State<Register> {
               //   ),
               // ),
               Container(
-                padding: EdgeInsets.only(left: 50, top: 70, right: 35),
+                padding: EdgeInsets.only(left: 120, top: 150, right: 35),
                 child: Text(
                   'Đăng ký tài khoản',
-                  style: TextStyle(color: Colors.black, fontSize: 33),
+                  style: TextStyle(color: Colors.black, fontSize: 40),
                 ),
               ),
               SingleChildScrollView(
@@ -208,6 +208,9 @@ class RegisterState extends State<Register> {
                   padding: EdgeInsets.only(top: 130, right: 35, left: 35),
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 130,
+                      ),
                       TextField(
                         controller: _name,
                         decoration: InputDecoration(
@@ -218,7 +221,7 @@ class RegisterState extends State<Register> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 50,
                       ),
                       TextField(
                         controller: _emailText,
@@ -230,7 +233,7 @@ class RegisterState extends State<Register> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 50,
                       ),
                       TextField(
                         obscureText: hidePass,
@@ -265,7 +268,7 @@ class RegisterState extends State<Register> {
                         onSuccess: () {},
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 50,
                       ),
                       TextField(
                         obscureText: hidePass,
@@ -291,7 +294,7 @@ class RegisterState extends State<Register> {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 50,
                       ),
                       TextField(
                         controller: _phone,
@@ -311,7 +314,7 @@ class RegisterState extends State<Register> {
                           Text(
                             'Đăng kí',
                             style: TextStyle(
-                                fontSize: 27, fontWeight: FontWeight.w700),
+                                fontSize: 40, fontWeight: FontWeight.w700),
                           ),
                           CircleAvatar(
                             radius: 30,
@@ -349,7 +352,7 @@ class RegisterState extends State<Register> {
                                       timeInSecForIosWeb: 2,
                                       textColor: Colors.white,
                                       backgroundColor: Colors.greenAccent,
-                                      fontSize: 20,
+                                      fontSize: 30,
                                     );
                                   }
                                 }
@@ -360,7 +363,7 @@ class RegisterState extends State<Register> {
                         ],
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 85,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -368,7 +371,7 @@ class RegisterState extends State<Register> {
                           Text(
                             "Bạn đã có tài khoản",
                             style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
+                                fontSize: 25, fontWeight: FontWeight.bold),
                           ),
                           GestureDetector(
                               onTap: () {
@@ -378,9 +381,9 @@ class RegisterState extends State<Register> {
                               child: Text(
                                 "Đăng nhập ngay",
                                 style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 30,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.blue),
+                                    color: Colors.red),
                               ))
                         ],
                       )

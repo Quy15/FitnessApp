@@ -7,6 +7,8 @@ import 'package:dev/layout/login.dart';
 import 'package:dev/layout/pt_page.dart';
 import 'package:flutter/material.dart';
 
+import 'intro_page.dart';
+
 class MyAuth extends StatelessWidget {
   final String? email;
   const MyAuth({required this.email});
@@ -54,7 +56,7 @@ class MyAuth extends StatelessWidget {
           }else if (isAnswered == true || trainer == 'trainer'){
             return TrainerHomePage();
           }else{
-            return Home();
+            return IntroPage();
           }
         }else{
           return Login();

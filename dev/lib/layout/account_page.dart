@@ -94,12 +94,12 @@ class _AccountPageState extends State<AccountPage> {
                 children: [
                   Icon(
                     Icons.person,
-                    size: 60,
+                    size: 70,
                     color: Colors.black,
                   ),
                   Positioned(
-                    bottom: 40,
-                    left: 210,
+                    bottom: 50,
+                    left: 290,
                     child: Icon(
                       Icons.camera_alt,
                       size: 20,
@@ -110,15 +110,15 @@ class _AccountPageState extends State<AccountPage> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             Text(
               _name.text,
-              style: TextStyle(color: Colors.grey[600], fontSize: 20),
+              style: TextStyle(color: Colors.grey[600], fontSize: 30),
               textAlign: TextAlign.center,
             ),
             SizedBox(
-              height: 10,
+              height: 50,
             ),
             buildChangePassword(),
             // buildUserInfo()
@@ -135,7 +135,7 @@ class _AccountPageState extends State<AccountPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)))),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     TextFormField(
                         controller: _phone,
@@ -146,7 +146,7 @@ class _AccountPageState extends State<AccountPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)))),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     TextFormField(
                         initialValue: email,
@@ -158,7 +158,7 @@ class _AccountPageState extends State<AccountPage> {
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10)))),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     TextFormField(
                       controller: _height,
@@ -172,7 +172,7 @@ class _AccountPageState extends State<AccountPage> {
                           TextInputType.numberWithOptions(decimal: true),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     TextFormField(
                       controller: _weight,
@@ -183,38 +183,43 @@ class _AccountPageState extends State<AccountPage> {
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10))),
                       keyboardType:
-                      TextInputType.numberWithOptions(decimal: true),
+                          TextInputType.numberWithOptions(decimal: true),
                     ),
                     SizedBox(
-                      height: 10,
+                      height: 50,
                     ),
                     SizedBox(
                       height: 5,
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_name.text.trim() == "" ||
-                            _phone.text.trim() == "" ||
-                            _weight.text.trim() == "" ||
-                            _height.text.trim() == "") {
-                          showToastValidation();
-                        } else if (!isPhoneNoValid(_phone.text.trim())) {
-                          showToastValidationPhone();
-                        } else if (!_heightRegex
-                            .hasMatch(_height.text.trim())) {
-                          showToastValidationHeight();
-                        } else if (!_weightRegex
-                            .hasMatch(_weight.text.trim())) {
-                          showToastValidationWeight();
-                        } else {
-                          updateUser(_name.text.trim(), _phone.text.trim(),
-                              _height.text.trim(), _weight.text.trim());
-                          Navigator.pop(context);
-                          showToastSuccess();
-                        }
-                      },
-                      child: Text('Lưu cập nhật'),
-                    ),
+                        onPressed: () {
+                          if (_name.text.trim() == "" ||
+                              _phone.text.trim() == "" ||
+                              _weight.text.trim() == "" ||
+                              _height.text.trim() == "") {
+                            showToastValidation();
+                          } else if (!isPhoneNoValid(_phone.text.trim())) {
+                            showToastValidationPhone();
+                          } else if (!_heightRegex
+                              .hasMatch(_height.text.trim())) {
+                            showToastValidationHeight();
+                          } else if (!_weightRegex
+                              .hasMatch(_weight.text.trim())) {
+                            showToastValidationWeight();
+                          } else {
+                            updateUser(_name.text.trim(), _phone.text.trim(),
+                                _height.text.trim(), _weight.text.trim());
+                            Navigator.pop(context);
+                            showToastSuccess();
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            'Lưu thông tin',
+                            style: TextStyle(fontSize: 23),
+                          ),
+                        )),
                   ],
                 )),
           ],

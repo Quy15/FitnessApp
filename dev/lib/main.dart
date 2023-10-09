@@ -17,6 +17,8 @@ import 'Trainer/trainer_create_exersise_calendar.dart';
 import 'Trainer/trainer_homepage.dart';
 import 'admin/admin_manage_user.dart';
 import 'admin/admin_pt_user_manage.dart';
+import 'layout/home_survey.dart';
+import 'layout/intro_page.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -41,9 +43,11 @@ class MyApp extends StatelessWidget {
       title: 'HealthApp',
       routes: {
         'splash': (context) => Splash(),
+        'intro_page': (context) => IntroPage(),
         'register': (context) => RegisterPT(),
         'login': (context) => Login(),
-        'home': (context) => Home(),   
+        'home': (context) => Home(),
+        'home_survey': (context) => HomeSurvey(),
         'homepage': (context) => HomePage(),
         'admin_homepage': (context) => AdminHomePage(),
         'admin_manage_user': (context) => AdminManageUser(),
