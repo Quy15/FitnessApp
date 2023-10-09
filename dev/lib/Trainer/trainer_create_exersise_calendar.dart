@@ -58,8 +58,6 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
     String user_uid = '${widget.uid}'; // Đây là uid của người dùng
     CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
     userCollection.doc(user_uid).collection('exersise_calendar').get();
-
-
   }
 
   @override

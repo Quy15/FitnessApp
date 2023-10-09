@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/layout/cancel_rent.dart';
+import 'package:dev/layout/listpt.dart';
 import 'package:dev/layout/schedue.dart';
 import 'package:dev/layout/select_pt.dart';
 import 'package:dev/push_noti/push_noti.dart';
@@ -257,7 +259,7 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ChoosePT()));
                             },
-                            child: Icon(Icons.list_alt_outlined)),
+                            child: Icon(Icons.list_alt_outlined, size: 40,)),
                       ),
                       SizedBox(
                         height: 5,
@@ -291,7 +293,7 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Schedue()));
                             },
-                            child: Icon(Icons.calendar_today)),
+                            child: Icon(Icons.calendar_today, size: 40,)),
                       ),
                       SizedBox(
                         height: 5,
@@ -300,6 +302,77 @@ class _HomeTab extends State<HomeTab> {
                         'Lịch tập',
                         style: TextStyle(fontSize: 20),
                       ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 5.0,
+                                spreadRadius: 1.1,
+                              ),
+                            ]),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ListPT()));
+                            },
+                            child: Icon(Icons.view_list_outlined, size: 40,)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Danh sách PT',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      
+                    ],
+                  ),
+
+                   SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.12),
+                                blurRadius: 5.0,
+                                spreadRadius: 1.1,
+                              ),
+                            ]),
+                        child: ElevatedButton(
+                            onPressed: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CancelRent()));
+                            },
+                            child: Icon(Icons.cancel_sharp, size: 40,)),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        'Hủy thuê PT',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      
                     ],
                   ),
                 ],
