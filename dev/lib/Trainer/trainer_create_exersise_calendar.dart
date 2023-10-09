@@ -93,7 +93,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
     final size = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Tạo lịch tập cho học viên",style: TextStyle(color: Colors.black)),
+          title: Text("Tạo lịch tập cho học viên",style: TextStyle(color: Colors.black, fontSize: 25)),
           backgroundColor: Color(0xFF9FE7F5),
           elevation: 0,
         ),
@@ -103,7 +103,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                 child: Column(
                   children: [
                     Container(
-                      height: 280,
+                      height: 300,
                       width: size,
                       decoration: BoxDecoration(
                         color: Color(0xFF9FE7F5),
@@ -118,9 +118,9 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Hãy tạo lịch tập luyện cho ',
-                                  style: TextStyle(color: Colors.black, fontSize: 30)),
+                                  style: TextStyle(color: Colors.black, fontSize: 35)),
                               Text(userName,
-                                  style: TextStyle(color: Colors.black, fontSize: 30)),
+                                  style: TextStyle(color: Colors.black, fontSize: 35)),
                               SizedBox(
                                 height: 10,
                               ),
@@ -153,7 +153,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                         children: [
                                           Text(
                                             'Ngày tập ',
-                                            style: TextStyle(fontSize: 18, color: Colors.black),
+                                            style: TextStyle(fontSize: 30, color: Colors.black),
                                           ),
                                           Icon(Icons.calendar_today,
                                             color: Colors.black,
@@ -166,8 +166,8 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                     width: 30,
                                   ),
                                   Container(
-                                    width: 150,
-                                    height: 40,
+                                    width: 200,
+                                    height: 55,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: Colors.lightBlueAccent.shade100, // Màu border
@@ -177,7 +177,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                     child: Center(
                                       child: Text(
                                         _dateOfBirth.text.toString(),
-                                        style: TextStyle(color: Colors.black, fontSize: 25),
+                                        style: TextStyle(color: Colors.black, fontSize: 30),
                                       ),
                                     )
                                   ),
@@ -193,12 +193,12 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                   ),
                                   Text('Bài tập ',
                                       style:
-                                          TextStyle(color: Colors.black, fontSize: 25)),
+                                          TextStyle(color: Colors.black, fontSize: 33)),
                                   SizedBox(
                                     width: 40,
                                   ),
                                   Container(
-                                    width: 200,
+                                    width: 300,
                                     child:StreamBuilder<List<String>>(
                                       stream: getExerciseNamesStream('${widget.uid}'),
                                       builder: (context, snapshot) {
@@ -225,7 +225,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                                 value: name,
                                                 child: Text(
                                                   name,
-                                                  style: TextStyle(color: Colors.black, fontSize: 20),
+                                                  style: TextStyle(color: Colors.black, fontSize: 28),
                                                 ),
                                               );
                                             }).toList(),
@@ -254,7 +254,7 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                     padding: EdgeInsets.all(10),
                                         child:Text(
                                           'Tạo lịch tập',
-                                          style: TextStyle(fontSize: 18, color: Colors.black),
+                                          style: TextStyle(fontSize: 25, color: Colors.black),
                                         ),
                                     ),
                                   ),

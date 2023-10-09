@@ -105,7 +105,7 @@ class _HomePTState extends State<HomePT> {
                                   "Xin chào, " + ptname,
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 35,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Container(
@@ -133,7 +133,7 @@ class _HomePTState extends State<HomePT> {
                               "Hãy kiểm tra các hoạt động của bạn",
                               style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 16,
+                                fontSize: 25,
                               ),
                             ),
                           ],
@@ -144,7 +144,7 @@ class _HomePTState extends State<HomePT> {
                       child: Row(
                         children: [
                           Container(
-                              width: 180,
+                              width: 250,
                               height: 160,
                               margin: EdgeInsets.all(7),
                               padding: EdgeInsets.all(10),
@@ -172,7 +172,7 @@ class _HomePTState extends State<HomePT> {
                                         "Tổng bài tập đã tạo",
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 18,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -195,18 +195,10 @@ class _HomePTState extends State<HomePT> {
                                       countExersise(),
                                     ],
                                   ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    "",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
                                 ],
                               )),
                           Container(
-                              width: 180,
+                              width: 230,
                               height: 160,
                               margin: EdgeInsets.all(8),
                               padding: EdgeInsets.all(10),
@@ -234,7 +226,7 @@ class _HomePTState extends State<HomePT> {
                                         "Số người thuê bạn",
                                         style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 18,
+                                            fontSize: 25,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -257,14 +249,6 @@ class _HomePTState extends State<HomePT> {
                                       countUserRentPt(),
                                     ],
                                   ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    "",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                    ),
-                                  ),
                                 ],
                               )),
                         ],
@@ -278,20 +262,19 @@ class _HomePTState extends State<HomePT> {
               child: Text(
                 "Danh sách học viên",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 35,
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: 10,
-            // ),
+            SizedBox(
+              height: 10,
+            ),
             ListView(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 children: <Widget>[
                   Container(
-                    height: 390,
+                    height: 650,
                     child: buildExerciseList(),
                   ),
                 ]),
@@ -357,9 +340,9 @@ class _HomePTState extends State<HomePT> {
       },
       child: ListTile(
       title: Container(
-        height: 100,
+        height: 140,
         width: 150,
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           color: Colors.lightBlue[100],
           borderRadius: BorderRadius.circular(8.0),
@@ -371,20 +354,38 @@ class _HomePTState extends State<HomePT> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(children: [
-                  Text("Tên: "),
-                  Text(name),
+                  Text("Tên: ",
+                      style: TextStyle(
+                        fontSize: 25,
+                      )),
+                  Text(name,
+                    style: TextStyle(
+                        fontSize: 25,
+                  )),
                 ]),
                 // Row(children: [
                 //   Text("Kinh nghiệm: "),
                 //   Text(experience),
                 // ]),
                 Row(children: [
-                  Text("Số điện thoại: "),
-                  Text(phone),
+                  Text("Số điện thoại: ",
+                      style: TextStyle(
+                        fontSize: 25,
+                      )),
+                  Text(phone,
+                      style: TextStyle(
+                        fontSize: 25,
+                      )),
                 ]),
                 Row(children: [
-                  Text("Email: "),
-                  Text(email),
+                  Text("Email: ",
+                      style: TextStyle(
+                        fontSize: 25,
+                      )),
+                  Text(email,
+                      style: TextStyle(
+                        fontSize: 25,
+                      )),
                 ]),
               ],
             ),

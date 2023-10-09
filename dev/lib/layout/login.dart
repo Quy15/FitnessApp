@@ -144,6 +144,7 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    double deviceWidth = MediaQuery.of(context).size.width;
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -152,33 +153,39 @@ class LoginState extends State<Login> {
           backgroundColor: Colors.transparent,
           body: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 135, left: 55, right: 50),
-                child: Container(
-                  child: Text(
-                    'Đăng nhập hệ thống',                   
-                    style: TextStyle(color: Colors.black, fontSize: 30,),
-                    textAlign: TextAlign.center,
+                Padding(
+                  padding: const EdgeInsets.only(top: 200, left: 80, right: 0),
+                  child: Container(
+                    child: Text(
+                      'Đăng nhập hệ thống',
+                      style: TextStyle(color: Colors.black, fontSize: 45,),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
               SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.only(top: 270, right: 35, left: 35),
                   child: Column(
                     children: [
+                      SizedBox(
+                        height: 100,
+                      ),
                       TextField(
                         controller: _email,
                         decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.person_rounded,
-                              color: Colors.black,
-                            ),
-                            fillColor: Colors.grey.shade100,
-                            filled: true,
-                            hintText: 'Nhập tài khoản',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                          prefixIcon: Icon(
+                            Icons.person_rounded,
+                            color: Colors.black,
+                          ),
+                          fillColor: Colors.grey.shade100,
+                          filled: true,
+                          hintText: 'Nhập tài khoản',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 25, horizontal: 16), // Thay đổi kích thước
+                        ),
                       ),
                       SizedBox(
                         height: 30,
@@ -208,7 +215,9 @@ class LoginState extends State<Login> {
                             filled: true,
                             hintText: 'Nhập mật khẩu',
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
+                                borderRadius: BorderRadius.circular(10)),
+                            contentPadding: EdgeInsets.symmetric(vertical: 25, horizontal: 16),
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -225,7 +234,7 @@ class LoginState extends State<Login> {
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontSize: 30,
                                 color: Color(0xff4c505b),
                               ),
                             ),
@@ -241,13 +250,13 @@ class LoginState extends State<Login> {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => Splash()));
                               },
-                              icon: Icon(Icons.arrow_forward),
+                              icon: Icon(Icons.arrow_forward, size: 36,),
                             ),
                           )
                         ],
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 80,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -262,7 +271,7 @@ class LoginState extends State<Login> {
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontSize: 30,
                                 color: Color(0xff4c505b),
                               ),
                             ),
@@ -277,7 +286,7 @@ class LoginState extends State<Login> {
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                                fontSize: 30,
                                 color: Color(0xff4c505b),
                               ),
                             ),

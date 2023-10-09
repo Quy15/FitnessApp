@@ -104,7 +104,7 @@ class TrainingState extends State<Training> {
         ),
         backgroundColor: Colors.grey[100],
         body: Container(
-            height: 700,
+            height: 1100,
             child: Column(children: [
               Row(children: [
                 OpenContainer(
@@ -322,7 +322,7 @@ class TrainingState extends State<Training> {
                   shrinkWrap: true,
                   children: <Widget>[
                     Container(
-                      height: 640,
+                      height: 900,
                       child: buildExerciseList(),
                     ),
                   ])
