@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
 class TrainerCreateExersiseCalendarPage extends StatefulWidget {
   final String uid;
   const TrainerCreateExersiseCalendarPage({Key? key, required this.uid})
@@ -16,7 +15,8 @@ class TrainerCreateExersiseCalendarPage extends StatefulWidget {
 
 List<String> exerciseNames = [];
 
-class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersiseCalendarPage> {
+class _TrainerCreateExersiseCalendarPageState
+    extends State<TrainerCreateExersiseCalendarPage> {
   final user = FirebaseAuth.instance.currentUser;
 
   final _dateOfBirth = TextEditingController();
@@ -37,26 +37,45 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
     });
   }
 
+  
 
   void addExersiseToUser(DateTime dob, String nameExsersise) async {
     String user_uid = '${widget.uid}'; // Đây là uid của người dùng
     String? pt_uid = user?.uid; // Đây là uid của người dùng
-    CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+    String rep = "";
+    String set = "";
+    CollectionReference userCollection =
+        FirebaseFirestore.instance.collection('users');
 
-    userCollection.doc(user_uid).collection('exersise_calendar').add(
-      {
-        'user_id':user_uid,
-        'pt_id':pt_uid,
-        'created_date': DateTime.now(),
-        'date': dob,
-        'name': nameExsersise,
+     await FirebaseFirestore.instance
+        .collection("exersise")
+        .where("name", isEqualTo: nameExsersise)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        rep = '${doc['rep']}';
+        set = '${doc['set']}';
+        print(rep);
+        print(set);
       });
-      showToastSuccess();
+    });
+
+    userCollection.doc(user_uid).collection('exersise_calendar').add({
+      'user_id': user_uid,
+      'pt_id': pt_uid,
+      'created_date': DateTime.now(),
+      'date': dob,
+      'name': nameExsersise,
+      'set': set,
+      'rep': rep
+    });
+    showToastSuccess();
   }
 
   void getExersiseOfUser() async {
     String user_uid = '${widget.uid}'; // Đây là uid của người dùng
-    CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+    CollectionReference userCollection =
+        FirebaseFirestore.instance.collection('users');
     userCollection.doc(user_uid).collection('exersise_calendar').get();
   }
 
@@ -93,7 +112,8 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
     final size = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
-          title: Text("Tạo lịch tập cho học viên",style: TextStyle(color: Colors.black, fontSize: 25)),
+          title: Text("Tạo lịch tập cho học viên",
+              style: TextStyle(color: Colors.black, fontSize: 25)),
           backgroundColor: Color(0xFF9FE7F5),
           elevation: 0,
         ),
@@ -118,9 +138,11 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Hãy tạo lịch tập luyện cho ',
-                                  style: TextStyle(color: Colors.black, fontSize: 35)),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 35)),
                               Text(userName,
-                                  style: TextStyle(color: Colors.black, fontSize: 35)),
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 35)),
                               SizedBox(
                                 height: 10,
                               ),
@@ -128,7 +150,8 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                 children: [
                                   ElevatedButton(
                                     onPressed: () async {
-                                      DateTime? selectedDate = await showDatePicker(
+                                      DateTime? selectedDate =
+                                          await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(1900),
@@ -138,12 +161,15 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                         // Cập nhật giá trị ngày sinh vào controller
                                         setState(() {
                                           _dateOfBirth.text =
-                                              "${selectedDate.toLocal()}".split(' ')[0];
+                                              "${selectedDate.toLocal()}"
+                                                  .split(' ')[0];
                                         });
                                       }
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Color(0xFF9FE7F5)), // Đặt màu nền cho nút
+                                      backgroundColor:
+                                          MaterialStateProperty.all(Color(
+                                              0xFF9FE7F5)), // Đặt màu nền cho nút
                                     ),
                                     child: Container(
                                       padding: EdgeInsets.all(10),
@@ -153,9 +179,12 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                         children: [
                                           Text(
                                             'Ngày tập ',
-                                            style: TextStyle(fontSize: 30, color: Colors.black),
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                color: Colors.black),
                                           ),
-                                          Icon(Icons.calendar_today,
+                                          Icon(
+                                            Icons.calendar_today,
                                             color: Colors.black,
                                           ),
                                         ],
@@ -166,21 +195,23 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                     width: 30,
                                   ),
                                   Container(
-                                    width: 200,
-                                    height: 55,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.lightBlueAccent.shade100, // Màu border
-                                        width: 2.0, // Độ rộng của border
+                                      width: 200,
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.lightBlueAccent
+                                              .shade100, // Màu border
+                                          width: 2.0, // Độ rộng của border
+                                        ),
                                       ),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        _dateOfBirth.text.toString(),
-                                        style: TextStyle(color: Colors.black, fontSize: 30),
-                                      ),
-                                    )
-                                  ),
+                                      child: Center(
+                                        child: Text(
+                                          _dateOfBirth.text.toString(),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 30),
+                                        ),
+                                      )),
                                 ],
                               ),
                               SizedBox(
@@ -192,21 +223,24 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                     width: 30,
                                   ),
                                   Text('Bài tập ',
-                                      style:
-                                          TextStyle(color: Colors.black, fontSize: 33)),
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 33)),
                                   SizedBox(
                                     width: 40,
                                   ),
                                   Container(
                                     width: 300,
-                                    child:StreamBuilder<List<String>>(
-                                      stream: getExerciseNamesStream('${widget.uid}'),
+                                    child: StreamBuilder<List<String>>(
+                                      stream: getExerciseNamesStream(
+                                          '${widget.uid}'),
                                       builder: (context, snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
                                           return CircularProgressIndicator();
                                         } else if (snapshot.hasError) {
                                           return Text('Lỗi: ${snapshot.error}');
-                                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                        } else if (!snapshot.hasData ||
+                                            snapshot.data!.isEmpty) {
                                           return Text('Không có dữ liệu');
                                         } else {
                                           exerciseNames = snapshot.data!;
@@ -216,16 +250,21 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                                             value: selectedExerciseName,
                                             onChanged: (String? newValue) {
                                               setState(() {
-                                                selectedExerciseName = newValue!;
+                                                selectedExerciseName =
+                                                    newValue!;
                                               });
                                             },
                                             isExpanded: false,
-                                            items: exerciseNames.map<DropdownMenuItem<String>>((String name) {
+                                            items: exerciseNames
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String name) {
                                               return DropdownMenuItem<String>(
                                                 value: name,
                                                 child: Text(
                                                   name,
-                                                  style: TextStyle(color: Colors.black, fontSize: 28),
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 28),
                                                 ),
                                               );
                                             }).toList(),
@@ -241,24 +280,29 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                               ),
                               Center(
                                 child: ElevatedButton(
-                                  onPressed: ()  {
-                                    addExersiseToUser(DateTime.parse(_dateOfBirth.text), selectedExerciseName);
+                                  onPressed: () {
+                                    addExersiseToUser(
+                                        DateTime.parse(_dateOfBirth.text),
+                                        selectedExerciseName);
                                     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                                     print(_dateOfBirth.text);
                                     print(selectedExerciseName);
                                   },
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Color(0xFF9FE7F5)), // Đặt màu nền cho nút
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Color(
+                                            0xFF9FE7F5)), // Đặt màu nền cho nút
                                   ),
                                   child: Container(
                                     padding: EdgeInsets.all(10),
-                                        child:Text(
-                                          'Tạo lịch tập',
-                                          style: TextStyle(fontSize: 25, color: Colors.black),
-                                        ),
+                                    child: Text(
+                                      'Tạo lịch tập',
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.black),
                                     ),
                                   ),
                                 ),
+                              ),
                             ],
                           ),
                         ),
@@ -273,12 +317,12 @@ class _TrainerCreateExersiseCalendarPageState extends State<TrainerCreateExersis
                           topRight: Radius.circular(70.0),
                         ),
                       ),
-
                     ),
                   ],
-        ))));
+                ))));
   }
 }
+
 void showToastSuccess() {
   Fluttertoast.showToast(
     msg: 'Tạo bài tập thành công',

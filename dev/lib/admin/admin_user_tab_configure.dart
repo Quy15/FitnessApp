@@ -12,11 +12,9 @@ class AdminUserTabConfigure extends StatefulWidget {
 }
 
 class AdminUserTabConfigureState extends State<AdminUserTabConfigure> {
-
-  
   List<String> uIDs = [];
-  Future getUser() async{
-     await FirebaseFirestore.instance
+  Future getUser() async {
+    await FirebaseFirestore.instance
         .collection("users")
         .get()
         .then((QuerySnapshot snapshot) {
@@ -27,11 +25,11 @@ class AdminUserTabConfigureState extends State<AdminUserTabConfigure> {
   }
 
   Future deleteUser(String uid) async {
-     try {
+    try {
       await FirebaseFirestore.instance.collection("users").doc(uid).delete();
       Navigator.of(context).pop();
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => AdminUserTabConfigure()));
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => AdminUserTabConfigure()));
       Fluttertoast.showToast(
         msg: 'Xóa thành công',
         toastLength: Toast.LENGTH_SHORT,
@@ -46,7 +44,6 @@ class AdminUserTabConfigureState extends State<AdminUserTabConfigure> {
         msg: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
       );
     }
-
   }
 
   @override
@@ -73,116 +70,7 @@ class AdminUserTabConfigureState extends State<AdminUserTabConfigure> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AdminGetUser(uID: uIDs[index]),
-                      IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Xác nhận xóa',
-                                      style: TextStyle(fontSize: 25),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Text(
-                                        'Bạn chắc chắn muốn xóa người dùng này ?',
-                                        style: TextStyle(fontSize: 25)),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 30),
-                                              child: SizedBox(
-                                                width: 150,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      primary:
-                                                          const Color.fromARGB(
-                                                              255, 128, 241, 132),
-                                                      side: BorderSide(
-                                                          width: 3,
-                                                          color:
-                                                              const Color.fromARGB(
-                                                                  255,
-                                                                  128,
-                                                                  241,
-                                                                  132)),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                  onPressed: () {
-                                                    deleteUser(uIDs[index]);
-                                                  },
-                                                  child: Text(
-                                                    'Chắc chắn',
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 30),
-                                              child: SizedBox(
-                                                width: 150,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      primary: Color.fromARGB(
-                                                          255, 221, 90, 85),
-                                                      side: BorderSide(
-                                                          width: 3,
-                                                          color:
-                                                              const Color.fromARGB(
-                                                                  255,
-                                                                  221,
-                                                                  90,
-                                                                  85)),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AdminUserTabConfigure()));
-                                                  },
-                                                  child: Text(
-                                                    'Trở về',
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )),
-                                        ],
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                          icon: Icon(
-                            Icons.cancel_outlined,
-                            size: 40,
-                            color: Colors.red,
-                          ))
-                    ],
-                  ),
+                  child: AdminGetUser(uID: uIDs[index]),
                 ),
               );
             },

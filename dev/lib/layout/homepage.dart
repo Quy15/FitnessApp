@@ -24,7 +24,7 @@ void signOut() async {
 
 class _HomePageState extends State<HomePage>{
   
-  final screen = [HomeTab(), Chat(), Macro() ,Setting()];
+  final screen = [HomeTab(), Chat(), Setting()];
   int index = 0;
 
   @override
@@ -53,7 +53,6 @@ class _HomePageState extends State<HomePage>{
               tabs: [
                 GButton(icon: Icons.home, text: 'Trang chủ',),
                 GButton(icon: Icons.chat_bubble, text: 'Chat',),
-                GButton(icon: Icons.restaurant_menu, text: 'Macro',),
                 GButton(icon: Icons.settings, text: 'Cài đặt',),
               ]
               ),

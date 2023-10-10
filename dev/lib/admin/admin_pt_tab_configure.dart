@@ -28,19 +28,6 @@ class AdminPTTabConfigureState extends State<AdminPTTabConfigure> {
     });
   }
 
-  Future getPTID() async {
-    await FirebaseFirestore.instance
-        .collection("trainers")
-        .where("active", isEqualTo: true)
-        .get()
-        .then((QuerySnapshot snapshot) {
-      snapshot.docs.forEach((DocumentSnapshot doc) {
-        ptNames.add('${doc['id']}');
-        print(ptNames);
-      });
-    });
-  }
-
   // String? u;
   // Future deleteUPT(String uid) async {
   //   await FirebaseFirestore.instance
@@ -85,7 +72,6 @@ class AdminPTTabConfigureState extends State<AdminPTTabConfigure> {
 
   @override
   void initState() {
-    getPTID();
     super.initState();
   }
 
@@ -112,116 +98,7 @@ class AdminPTTabConfigureState extends State<AdminPTTabConfigure> {
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(8.0),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AdminGetPT(ptID: ptIDs[index]),
-                      IconButton(
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Xác nhận xóa',
-                                      style: TextStyle(fontSize: 25),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Text(
-                                        'Bạn chắc chắn muốn xóa pt này ?',
-                                        style: TextStyle(fontSize: 25)),
-                                    actions: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 30),
-                                              child: SizedBox(
-                                                width: 150,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      primary:
-                                                          const Color.fromARGB(
-                                                              255, 128, 241, 132),
-                                                      side: BorderSide(
-                                                          width: 3,
-                                                          color:
-                                                              const Color.fromARGB(
-                                                                  255,
-                                                                  128,
-                                                                  241,
-                                                                  132)),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                  onPressed: () {
-                                                    deletePT(ptIDs[index]);
-                                                  },
-                                                  child: Text(
-                                                    'Chắc chắn',
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 30),
-                                              child: SizedBox(
-                                                width: 150,
-                                                height: 50,
-                                                child: ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                      primary: Color.fromARGB(
-                                                          255, 221, 90, 85),
-                                                      side: BorderSide(
-                                                          width: 3,
-                                                          color:
-                                                              const Color.fromARGB(
-                                                                  255,
-                                                                  221,
-                                                                  90,
-                                                                  85)),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10))),
-                                                  onPressed: () {
-                                                    Navigator.of(context).push(
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AdminPTTabConfigure()));
-                                                  },
-                                                  child: Text(
-                                                    'Trở về',
-                                                    style: TextStyle(
-                                                        fontSize: 22,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                              )),
-                                        ],
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
-                          icon: Icon(
-                            Icons.cancel_outlined,
-                            size: 40,
-                            color: Colors.red,
-                          ))
-                    ],
-                  ),
+                  child: AdminGetPT(ptID: ptIDs[index]),
                 ),
               );
             },
