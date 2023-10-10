@@ -29,6 +29,7 @@ class SettingPTState extends State<SettingPT> {
 
   String id = " ";
   String ptID = " ";
+  List<String> u = [];
   Future getPT(String? email) async {
     await FirebaseFirestore.instance
         .collection("trainers")
@@ -36,36 +37,34 @@ class SettingPTState extends State<SettingPT> {
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        setState(() {
           id = doc.reference.id;
           ptID = '${doc['id']}';
           print(id);
           print(ptID);
-        });
       });
     });
-  }
 
-  String u = " ";
-  Future deleteUPT() async {
     await FirebaseFirestore.instance
         .collection("users")
         .where("id_pt", isEqualTo: ptID)
         .get()
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
-        u = doc.reference.id;
+        u.add(doc.reference.id);
         print(u);
       });
     });
 
-    await FirebaseFirestore.instance.collection("users").doc(u).update({
+    u.forEach((String i)  async {
+       await FirebaseFirestore.instance.collection("users").doc(i).update({
       'id_pt': "",
       'call_id': "",
       'call_name': ""
     });
+    });
   }
-
+ 
+  
   void deletePT() async {
     await FirebaseFirestore.instance.collection("trainers").doc(id).delete();
   }
@@ -94,6 +93,7 @@ class SettingPTState extends State<SettingPT> {
       );
     });
     deletePT();
+    getPT(user.email);
   }
 
   @override
@@ -103,11 +103,6 @@ class SettingPTState extends State<SettingPT> {
     super.dispose();
   }
 
-   @override
-  void initState(){
-    getPT(user!.email);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
