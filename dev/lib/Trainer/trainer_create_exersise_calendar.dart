@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class TrainerCreateExersiseCalendarPage extends StatefulWidget {
   final String uid;
@@ -317,9 +318,75 @@ class _TrainerCreateExersiseCalendarPageState
                           topRight: Radius.circular(70.0),
                         ),
                       ),
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("users").doc(widget.uid)
+                                  .collection("exersise_calendar").where("pt_id", isEqualTo: user?.uid).snapshots(),
+                        builder: (context,AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
+                          if (snapshot.connectionState == ConnectionState.waiting){
+                            return Center(child: CircularProgressIndicator(),);
+                          }else if (!snapshot.hasData || snapshot.data == null){
+                            return Center(child: Text('Chưa có lịch tập cho người dùng này', style: TextStyle(fontSize: 20),),);
+                          }else if (snapshot.data!.docs.isNotEmpty){
+                            return ListView(
+                              children: snapshot.data!.docs.map((document) => _buildCal(document)).toList(),
+                            );
+                          }else{
+                            return Text("");
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ))));
+  }
+
+  Widget _buildCal(DocumentSnapshot documentSnapshot){
+     Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+    Timestamp time = data['date'];
+    DateTime d = time.toDate();
+    String format = DateFormat('yyyy-MM-dd').format(d);
+    return Container(
+      height: 150,
+      margin: EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Row(children: [
+            Text(
+              "Ngày tập: ",
+              style: TextStyle(fontSize: 25),
+            ),
+            Text(format, style: TextStyle(fontSize: 25)),
+          ]),
+          Row(children: [
+            Text(
+              "Tên: ",
+              style: TextStyle(fontSize: 25),
+            ),
+            Text(data['name'], style: TextStyle(fontSize: 25)),
+          ]),
+          Row(children: [
+            Text(
+              "Số set: ",
+              style: TextStyle(fontSize: 25),
+            ),
+            Text(data['set'], style: TextStyle(fontSize: 25)),
+          ]),
+          Row(children: [
+            Text(
+              "Số rep: ",
+              style: TextStyle(fontSize: 25),
+            ),
+            Text(data['rep'], style: TextStyle(fontSize: 25)),
+          ]),
+        ],
+      ),
+    );
   }
 }
 

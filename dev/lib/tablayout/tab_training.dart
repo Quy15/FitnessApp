@@ -19,6 +19,9 @@ List<String> equipments = [
   'Dây',
   'Thảm trải',
   'Dây nhảy',
+  'Xà đơn',
+  'Xà kép',
+  'Xà cao'
 ];
 List<String> muscleGroup = [
   'Bắp chân',
@@ -326,7 +329,10 @@ class TrainingState extends State<Training> {
                       child: buildExerciseList(),
                     ),
                   ])
-            ])));
+            
+            ])
+            )
+            );
   }
   Future<List<QueryDocumentSnapshot>> getExersise() async {
     try {
