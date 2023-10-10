@@ -14,9 +14,9 @@ class _MacroState extends State<Macro> {
   TextEditingController _proCon = TextEditingController();
   final _carbCon = TextEditingController();
   final _fatCon = TextEditingController();
-  double pro = 0;
-  double carb = 0;
-  double fat = 0;
+  double pro = 40;
+  double carb = 40;
+  double fat = 40;
   double p = 0;
   double f = 0;
   double c = 0;

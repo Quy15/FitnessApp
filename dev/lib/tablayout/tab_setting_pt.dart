@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dev/layout/account_page.dart';
 import 'package:dev/layout/account_page_pt.dart';
+import 'package:dev/layout/homepage.dart';
+import 'package:dev/layout/login.dart';
+import 'package:dev/tablayout/tab_homept.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingPT extends StatefulWidget {
   const SettingPT({super.key});
@@ -17,6 +22,92 @@ void signOut() {
 }
 
 class SettingPTState extends State<SettingPT> {
+  final _email = TextEditingController();
+  final _pass = TextEditingController();
+  bool hidePass = true;
+  final user = FirebaseAuth.instance.currentUser;
+
+  String id = " ";
+  String ptID = " ";
+  Future getPT(String? email) async {
+    await FirebaseFirestore.instance
+        .collection("trainers")
+        .where("email", isEqualTo: email)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        setState(() {
+          id = doc.reference.id;
+          ptID = '${doc['id']}';
+          print(id);
+          print(ptID);
+        });
+      });
+    });
+  }
+
+  String u = " ";
+  Future deleteUPT() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .where("id_pt", isEqualTo: ptID)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      snapshot.docs.forEach((DocumentSnapshot doc) {
+        u = doc.reference.id;
+        print(u);
+      });
+    });
+
+    await FirebaseFirestore.instance.collection("users").doc(u).update({
+      'id_pt': "",
+      'call_id': "",
+      'call_name': ""
+    });
+  }
+
+  void deletePT() async {
+    await FirebaseFirestore.instance.collection("trainers").doc(id).delete();
+  }
+
+
+  void  deletePTAccount(String email, String pass) async {
+     User user = await FirebaseAuth.instance.currentUser!;
+
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: email, password: pass);
+
+    await user.reauthenticateWithCredential(credential).then((value) {
+      value.user!.delete().then((res) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Login()));
+      });
+    }).catchError((onError) {
+      Fluttertoast.showToast(
+        msg: 'Tài khoản hoặc mật khẩu không đúng',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 2,
+        textColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 80, 182, 133),
+        fontSize: 25,
+      );
+    });
+    deletePT();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _pass.dispose();
+    super.dispose();
+  }
+
+   @override
+  void initState(){
+    getPT(user!.email);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +125,28 @@ class SettingPTState extends State<SettingPT> {
                   ),
                   child: Center(
                       child: Container(
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.white),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 60,
-                              color: Colors.black,
-                            ),
-                            Positioned(
-                              bottom: 40,
-                              left:40,
-                              child: Icon(
-                                Icons.camera_alt,
-                                size: 20,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: 60,
+                          color: Colors.black,
                         ),
-                      )),
+                        Positioned(
+                          bottom: 40,
+                          left: 40,
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )),
                 ),
                 SettingsGroup(
                   titleTextStyle: TextStyle(fontSize: 0),
@@ -93,7 +184,6 @@ class SettingPTState extends State<SettingPT> {
                 buildLogout(),
               ],
             ),
-
           ],
         ),
       ),
@@ -101,61 +191,180 @@ class SettingPTState extends State<SettingPT> {
   }
 
   Widget buildLogout() => SimpleSettingsTile(
-    title: 'Đăng xuất',
-    subtitle: '',
-    leading: Container(
-        padding: EdgeInsets.all(6),
-        decoration:
-        BoxDecoration(shape: BoxShape.circle, color: Colors.blueAccent),
-        child: Icon(
-          Icons.logout,
-          color: Colors.white,
-        )),
-    onTap: () {
-      signOut();
-      Navigator.pushNamed(context, 'login');
-    },
-  );
+        title: 'Đăng xuất',
+        subtitle: '',
+        leading: Container(
+            padding: EdgeInsets.all(6),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.blueAccent),
+            child: Icon(
+              Icons.logout,
+              color: Colors.white,
+            )),
+        onTap: () {
+          signOut();
+          Navigator.pushNamed(context, 'login');
+        },
+      );
 
   Widget buildDelete() => SimpleSettingsTile(
-    title: 'Xóa tài khoản',
-    subtitle: '',
-    leading: Container(
-        padding: EdgeInsets.all(6),
-        decoration:
-        BoxDecoration(shape: BoxShape.circle, color: Colors.pink),
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-        )),
-    onTap: () {},
-  );
+        title: 'Xóa tài khoản',
+        subtitle: '',
+        leading: Container(
+            padding: EdgeInsets.all(6),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.pink),
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+            )),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(
+                    'Xóa tài khoản',
+                    style: TextStyle(fontSize: 25),
+                    textAlign: TextAlign.center,
+                  ),
+                  content: Container(
+                    width: 500,
+                    height: 300,
+                    child: Column(
+                      children: [
+                        TextField(
+                          controller: _email,
+                          decoration: InputDecoration(
+                              fillColor: Colors.grey.shade100,
+                              filled: true,
+                              labelText: 'Email',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        TextField(
+                          obscureText: hidePass,
+                          controller: _pass,
+                          decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: hidePass
+                                    ? Icon(
+                                        Icons.visibility_off,
+                                        color: Colors.black,
+                                      )
+                                    : Icon(Icons.visibility),
+                                onPressed: () {
+                                  setState(() {
+                                    hidePass = !hidePass;
+                                  });
+                                },
+                              ),
+                              fillColor: Colors.grey.shade100,
+                              filled: true,
+                              labelText: 'Mật khẩu',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                        ),
+                        SizedBox(
+                          height: 40,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(left: 30),
+                                child: SizedBox(
+                                  width: 150,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary: const Color.fromARGB(
+                                            255, 128, 241, 132),
+                                        side: BorderSide(
+                                            width: 3,
+                                            color: const Color.fromARGB(
+                                                255, 128, 241, 132)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    onPressed: () {
+                                      deletePTAccount(_email.text.trim(),
+                                          _pass.text.trim());
+                                    },
+                                    child: Text(
+                                      'Chắc chắn',
+                                      style: TextStyle(
+                                          fontSize: 22, color: Colors.black),
+                                    ),
+                                  ),
+                                )),
+                            Padding(
+                                padding: const EdgeInsets.only(right: 30),
+                                child: SizedBox(
+                                  width: 150,
+                                  height: 50,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        primary:
+                                            Color.fromARGB(255, 221, 90, 85),
+                                        side: BorderSide(
+                                            width: 3,
+                                            color: const Color.fromARGB(
+                                                255, 221, 90, 85)),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomePT()));
+                                    },
+                                    child: Text(
+                                      'Trở về',
+                                      style: TextStyle(
+                                          fontSize: 22, color: Colors.black),
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+        },
+      );
 
   Widget buildBugFeed() => SimpleSettingsTile(
-    title: 'Báo lỗi',
-    subtitle: '',
-    leading: Container(
-        padding: EdgeInsets.all(6),
-        decoration:
-        BoxDecoration(shape: BoxShape.circle, color: Colors.red),
-        child: Icon(
-          Icons.bug_report,
-          color: Colors.white,
-        )),
-    onTap: () {},
-  );
+        title: 'Báo lỗi',
+        subtitle: '',
+        leading: Container(
+            padding: EdgeInsets.all(6),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+            child: Icon(
+              Icons.bug_report,
+              color: Colors.white,
+            )),
+        onTap: () {},
+      );
 
   Widget buildFeedBack() => SimpleSettingsTile(
-    title: 'Gửi đánh giá',
-    subtitle: '',
-    leading: Container(
-        padding: EdgeInsets.all(6),
-        decoration:
-        BoxDecoration(shape: BoxShape.circle, color: Colors.purple),
-        child: Icon(
-          Icons.feedback,
-          color: Colors.white,
-        )),
-    onTap: () {},
-  );
+        title: 'Gửi đánh giá',
+        subtitle: '',
+        leading: Container(
+            padding: EdgeInsets.all(6),
+            decoration:
+                BoxDecoration(shape: BoxShape.circle, color: Colors.purple),
+            child: Icon(
+              Icons.feedback,
+              color: Colors.white,
+            )),
+        onTap: () {},
+      );
 }

@@ -19,6 +19,35 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTab extends State<HomeTab> {
+  double pro = 40;
+  double carb = 40;
+  double fat = 40;
+  double p = 0;
+  double f = 0;
+  double c = 0;
+  double sum = 0;
+  String tb = " ";
+  String dam = " ";
+  String beo = " ";
+
+  String calPro() {
+    p = cn*2.2;
+    dam = p.toStringAsFixed(0);
+    return dam;
+  }
+
+  String calFat() {
+    f = ((tdee - 500) * (fat / 100)) / 9;
+    beo = f.toStringAsFixed(0);
+    return beo;
+  }
+
+  String calCarb() {
+    c = ((tdee - 500) * (carb / 100)) / 4;
+    tb = c.toStringAsFixed(0);
+    return tb;
+  }
+
   final user = FirebaseAuth.instance.currentUser;
 
   String id = " ";
@@ -88,7 +117,7 @@ class _HomeTab extends State<HomeTab> {
       tdee = bmr * 1.725;
     }
     if (zIndex == 'Vận động nặng') {
-      tdee = bmr* 1.9;
+      tdee = bmr * 1.9;
     }
     TDEE = tdee.toStringAsFixed(0);
     return TDEE;
@@ -116,19 +145,21 @@ class _HomeTab extends State<HomeTab> {
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
-            child: Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Column(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Xin chào " + uname,
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
                     CircleAvatar(
                       child: Icon(
@@ -155,7 +186,7 @@ class _HomeTab extends State<HomeTab> {
                 height: 280,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Color.fromARGB(255, 183, 164, 238)),
+                    color: Colors.lightBlue[200],),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -222,7 +253,8 @@ class _HomeTab extends State<HomeTab> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
-                      child: Text("TDEE: " + tdeeCal(), style: TextStyle(fontSize: 25)),
+                      child: Text("TDEE: " + tdeeCal(),
+                          style: TextStyle(fontSize: 25)),
                     )
                   ],
                 ),
@@ -259,7 +291,10 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ChoosePT()));
                             },
-                            child: Icon(Icons.list_alt_outlined, size: 40,)),
+                            child: Icon(
+                              Icons.list_alt_outlined,
+                              size: 40,
+                            )),
                       ),
                       SizedBox(
                         height: 5,
@@ -293,7 +328,10 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => Schedue()));
                             },
-                            child: Icon(Icons.calendar_today, size: 40,)),
+                            child: Icon(
+                              Icons.calendar_today,
+                              size: 40,
+                            )),
                       ),
                       SizedBox(
                         height: 5,
@@ -327,7 +365,10 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => ListPT()));
                             },
-                            child: Icon(Icons.view_list_outlined, size: 40,)),
+                            child: Icon(
+                              Icons.view_list_outlined,
+                              size: 40,
+                            )),
                       ),
                       SizedBox(
                         height: 5,
@@ -336,11 +377,9 @@ class _HomeTab extends State<HomeTab> {
                         'Danh sách PT',
                         style: TextStyle(fontSize: 20),
                       ),
-                      
                     ],
                   ),
-
-                   SizedBox(
+                  SizedBox(
                     width: 20,
                   ),
                   Column(
@@ -363,7 +402,10 @@ class _HomeTab extends State<HomeTab> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => CancelRent()));
                             },
-                            child: Icon(Icons.cancel_sharp, size: 40,)),
+                            child: Icon(
+                              Icons.cancel_sharp,
+                              size: 40,
+                            )),
                       ),
                       SizedBox(
                         height: 5,
@@ -372,15 +414,75 @@ class _HomeTab extends State<HomeTab> {
                         'Hủy thuê PT',
                         style: TextStyle(fontSize: 20),
                       ),
-                      
                     ],
                   ),
                 ],
-              )
-            ],
-                  ),
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Text(
+                'Macro (Tỉ lệ dinh dưỡng)',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              ),
+               SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "Số gam đạm cần phải nạp: ",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    Text(
+                      calPro() + " gam",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ],
                 ),
-          )),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "Số gam tinh bột cần phải nạp: ",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    Text(
+                      calCarb() + " gam",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: [
+                    Text(
+                      "Số gam chất béo cần phải nạp: ",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                    Text(
+                      calFat() + " gam",
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      )),
     );
   }
 }
