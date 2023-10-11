@@ -146,29 +146,74 @@ class _HomeTab extends State<HomeTab> {
       child: Scaffold(
           body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Xin chào " + uname,
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 0,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.lightBlue.withOpacity(0.2), // Màu bóng và độ trong suốt
+                      blurRadius: 10, // Độ mờ của bóng
+                      offset: Offset(0, 4), // Vị trí của bóng (dọc và ngang)
+                      spreadRadius: 2, // Độ lan tỏa của bóng
                     ),
-                    CircleAvatar(
-                      child: Icon(
-                        Icons.person,
-                        size: 40,
-                      ),
-                      radius: 30,
-                    )
                   ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible( // Sử dụng Flexible thay vì Text để đảm bảo xuống dòng khi cần
+                            child: Text(
+                              "Xin chào, " + uname,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[100],
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: Icon(
+                                Icons.person,
+                                size: 60,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        "Hãy kiểm tra các hoạt động của bạn",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -182,11 +227,11 @@ class _HomeTab extends State<HomeTab> {
                 height: 20,
               ),
               Container(
-                width: 500,
-                height: 280,
+                width: 530,
+                height: 200,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.lightBlue[200],),
+                    color: Colors.lightBlue[100],),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -229,7 +274,7 @@ class _HomeTab extends State<HomeTab> {
                       ],
                     ),
                     SizedBox(
-                      height: 60,
+                      height: 20,
                     ),
                     Row(
                       children: [
@@ -239,7 +284,7 @@ class _HomeTab extends State<HomeTab> {
                               style: TextStyle(fontSize: 25)),
                         ),
                         SizedBox(
-                          width: 50,
+                          width: 180,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -249,7 +294,7 @@ class _HomeTab extends State<HomeTab> {
                       ],
                     ),
                     SizedBox(
-                      height: 60,
+                      height: 20,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
@@ -421,64 +466,71 @@ class _HomeTab extends State<HomeTab> {
               SizedBox(
                 height: 40,
               ),
-              Text(
-                'Macro (Tỉ lệ dinh dưỡng)',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
-              ),
-               SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
+              Container(
+                width: 530,
+                height: 210,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.lightBlue[100],
+                ),
+                padding: const EdgeInsets.all(10), // Thêm khoảng cách 10 đơn vị cho tất cả các cạnh
+                child: Column(
                   children: [
                     Text(
-                      "Số gam đạm cần phải nạp: ",
-                      style: TextStyle(fontSize: 25),
+                      'Macro (Tỉ lệ dinh dưỡng)',
+                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
                     ),
-                    Text(
-                      calPro() + " gam",
-                      style: TextStyle(fontSize: 25),
+                    SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Số gam đạm cần phải nạp: ",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          Text(
+                            calPro() + " gam",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Số gam tinh bột cần phải nạp: ",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          Text(
+                            calCarb() + " gam",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Số gam chất béo cần phải nạp: ",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                          Text(
+                            calFat() + " gam",
+                            style: TextStyle(fontSize: 25),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    Text(
-                      "Số gam tinh bột cần phải nạp: ",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    Text(
-                      calCarb() + " gam",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: Row(
-                  children: [
-                    Text(
-                      "Số gam chất béo cần phải nạp: ",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    Text(
-                      calFat() + " gam",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ],
-                ),
-              ),
+              )
             ],
           ),
         ),

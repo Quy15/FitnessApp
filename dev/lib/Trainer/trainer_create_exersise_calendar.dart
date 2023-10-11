@@ -115,21 +115,24 @@ class _TrainerCreateExersiseCalendarPageState
         appBar: AppBar(
           title: Text("Tạo lịch tập cho học viên",
               style: TextStyle(color: Colors.black, fontSize: 25)),
-          backgroundColor: Color(0xFF9FE7F5),
+          backgroundColor: Colors.white,
           elevation: 0,
+          iconTheme: IconThemeData(
+            color: Colors.black,
+          ),
         ),
         body: SingleChildScrollView(
             child: Container(
-                height: 800,
+                height: 1100,
                 child: Column(
                   children: [
                     Container(
-                      height: 300,
+                      height: 310,
                       width: size,
                       decoration: BoxDecoration(
-                        color: Color(0xFF9FE7F5),
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(70.0),
+                        color: Colors.lightBlue[100],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(70),
                         ),
                       ),
                       child: Padding(
@@ -138,12 +141,19 @@ class _TrainerCreateExersiseCalendarPageState
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Hãy tạo lịch tập luyện cho ',
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 35)),
-                              Text(userName,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 35)),
+                              Center(
+                                child: Column(
+                                  children: [
+                                    Text('LỊCH TẬP LUYỆN CỦA BẠN ',
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 35)),
+                                    SizedBox(height: 10,),
+                                    Text(userName,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 35)),
+                                  ],
+                                ),
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -169,8 +179,7 @@ class _TrainerCreateExersiseCalendarPageState
                                     },
                                     style: ButtonStyle(
                                       backgroundColor:
-                                          MaterialStateProperty.all(Color(
-                                              0xFF9FE7F5)), // Đặt màu nền cho nút
+                                          MaterialStateProperty.all(Colors.lightBlue[100]), // Đặt màu nền cho nút
                                     ),
                                     child: Container(
                                       padding: EdgeInsets.all(10),
@@ -182,7 +191,7 @@ class _TrainerCreateExersiseCalendarPageState
                                             'Ngày tập ',
                                             style: TextStyle(
                                                 fontSize: 30,
-                                                color: Colors.black),
+                                                color: Colors.black, fontWeight: FontWeight.normal),
                                           ),
                                           Icon(
                                             Icons.calendar_today,
@@ -225,7 +234,7 @@ class _TrainerCreateExersiseCalendarPageState
                                   ),
                                   Text('Bài tập ',
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 33)),
+                                          color: Colors.black, fontSize: 30)),
                                   SizedBox(
                                     width: 40,
                                   ),
@@ -285,14 +294,9 @@ class _TrainerCreateExersiseCalendarPageState
                                     addExersiseToUser(
                                         DateTime.parse(_dateOfBirth.text),
                                         selectedExerciseName);
-                                    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                                    print(_dateOfBirth.text);
-                                    print(selectedExerciseName);
                                   },
                                   style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Color(
-                                            0xFF9FE7F5)), // Đặt màu nền cho nút
+                                    backgroundColor: MaterialStateProperty.all(Colors.lightBlue[100]), // Đặt màu nền cho nút
                                   ),
                                   child: Container(
                                     padding: EdgeInsets.all(10),
@@ -310,7 +314,7 @@ class _TrainerCreateExersiseCalendarPageState
                       ),
                     ),
                     Container(
-                      height: 490,
+                      height: 750,
                       width: size,
                       decoration: BoxDecoration(
                         // color: Colors.lightBlueAccent[200],
@@ -350,7 +354,7 @@ class _TrainerCreateExersiseCalendarPageState
       margin: EdgeInsets.all(8.0),
       padding: EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(

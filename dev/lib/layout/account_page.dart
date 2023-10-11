@@ -16,7 +16,7 @@ class _AccountPageState extends State<AccountPage> {
   final _phone = TextEditingController();
   final _weight = TextEditingController();
   final _height = TextEditingController();
-  final _heightRegex = RegExp(r'^\d+\.\d{1}$'); // Validate height
+  final _heightRegex = RegExp(r'^\d+\.\d+$'); // Validate height
   final _weightRegex = RegExp(r'^\d+$');
   @override
   void dispose() {
