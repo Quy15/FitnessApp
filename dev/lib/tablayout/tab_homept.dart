@@ -105,7 +105,7 @@ class _HomePTState extends State<HomePT> {
                                   "Xin chào, " + ptname,
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 35,
+                                      fontSize: 30,
                                       fontWeight: FontWeight.bold),
                                 ),
                                 Container(

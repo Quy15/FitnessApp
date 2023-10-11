@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dev/admin/admin_homepage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,11 +60,13 @@ class AdminManageUserState extends State<AdminManageUser> {
       Fluttertoast.showToast(
         msg: 'Tài khoản PT đã được tạo',
       );
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminHomePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => AdminManageUser()));
       return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
         Fluttertoast.showToast(
-          msg: 'Đã có lỗi xảy ra, vui lòng thử lại sau',
+          msg: 'Đã có email đăng ký tài khoản này, hãy gửi mail báo PT đổi email',
         );
       }
       throw Exception(e.code);
@@ -124,7 +127,7 @@ class AdminManageUserState extends State<AdminManageUser> {
         title: Text("Duyệt danh sách PT đăng ký"),
         backgroundColor: Colors.lightBlueAccent[200],
       ),
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.grey[200],
       body: FutureBuilder<List<QueryDocumentSnapshot>>(
         future: getInactiveTrainers(),
         builder: (context, snapshot) {
@@ -163,9 +166,9 @@ class AdminManageUserState extends State<AdminManageUser> {
                     height: 130,
                     width: 150,
                     // margin: EdgeInsets.all(5.0),
-                    padding: EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(15),
                     decoration: BoxDecoration(
-                      color: Colors.grey[200],
+                      color: Colors.grey[50],
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Row(
@@ -192,8 +195,6 @@ class AdminManageUserState extends State<AdminManageUser> {
                             ]),
                             Row(children: [
                               Text("Email: "),
-                            ]),
-                            Row(children: [
                               Text(email),
                             ]),
                           ],
