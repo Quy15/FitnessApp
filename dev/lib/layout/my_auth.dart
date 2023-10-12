@@ -51,9 +51,9 @@ class MyAuth extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done){
           if((isAnswered == true && userType == 'user')){
             return HomePage();
-          }else if(isAnswered == true && userType == 'admin'){
+          }else if(userType == 'admin'){
             return AdminHomePage();
-          }else if (isAnswered == true || trainer == 'trainer'){
+          }else if (trainer == 'trainer'){
             return TrainerHomePage();
           }else{
             return IntroPage();

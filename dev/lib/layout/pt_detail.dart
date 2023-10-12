@@ -6,6 +6,7 @@ import 'package:dev/layout/select_pt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class PTDetail extends StatefulWidget {
   const PTDetail({super.key, required this.ptId});
@@ -37,6 +38,7 @@ class _PTDetailState extends State<PTDetail> {
       );
 
   String id = " ";
+  String name = " ";
   Future getUserByEmail(String? email) async {
     await FirebaseFirestore.instance
         .collection("users")
@@ -45,15 +47,18 @@ class _PTDetailState extends State<PTDetail> {
         .then((QuerySnapshot snapshot) {
       snapshot.docs.forEach((DocumentSnapshot doc) {
         id = doc.reference.id;
+        name = '${doc['name']}';
       });
     });
   }
 
   String ptid = " ";
+  String email = " ";
   final ref = FirebaseFirestore.instance.collection("trainers");
-  getPT() async{
+  getPT() async {
     DocumentSnapshot snapshot = await ref.doc(widget.ptId).get();
     ptid = snapshot['id'];
+    email = snapshot['email'];
     print(snapshot['id']);
   }
 
@@ -73,46 +78,53 @@ class _PTDetailState extends State<PTDetail> {
   //   });
   // }
 
-  void setPackage(String select){
-    if(select.contains("Gói ngày")){
+  void setPackage(String select) {
+    if (select.contains("Gói ngày")) {
       this.pid = 'K4Bexi49noYdkVeC8LYh';
-    }else if (select.contains("Gói tuần")){
+    } else if (select.contains("Gói tuần")) {
       this.pid = 'YrlUmjr09llwXJa6WC9A';
-    }else if (select.contains("Gói tháng")){
+    } else if (select.contains("Gói tháng")) {
       this.pid = 'd9lk43SUWnQ71qYc6sXK';
-    }else if (select.contains("Gói năm")){
+    } else if (select.contains("Gói năm")) {
       this.pid = 'hWoTvATC7u1vGzolZZnt';
     }
   }
-
 
   Future savePT() async {
     List<String> callId = [id, ptid];
     callId.sort();
     String cid = callId.join("_");
-    String cname = callId.join("_");    
+    String cname = callId.join("_");
     setPackage(selectedValue);
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(id)
-        .update({'id_pt': ptid, 'id_package': pid, 'call_id': cid, 'call_name': cname});
+
+    // final Email send_email = Email(
+    //   body: 'Bạn đã được đăng ký bởi người dùng ' + name + ',\n\n'
+    //           'Đăng nhập vào ứng dụng để kết nối với học viên của mình.\n'
+    //           'Hãy giúp họ đạt được mục tiêu của mình khi đến với HealthFit. \n\n'
+    //           'Chúc bạn một ngày làm việc tốt lành,\n'
+    //           'HealthFit Team',
+    //   subject: 'Thông báo hệ thống HealthFit',
+    //   recipients: [email],
+    //   attachmentPaths: [],
+    //   isHTML: false,
+    // );
+    // await FlutterEmailSender.send(send_email);
+
+    await FirebaseFirestore.instance.collection("users").doc(id).update(
+        {'id_pt': ptid, 'id_package': pid, 'call_id': cid, 'call_name': cname});
   }
 
   // Future saveUser() async {
   //   List<String> callId = [id, ptid];
   //   callId.sort();
   //   String cid = callId.join("_");
-  //   String cname = callId.join("_");    
+  //   String cname = callId.join("_");
   //   setPackage(selectedValue);
   //   await FirebaseFirestore.instance
   //       .collection("trainers")
   //       .doc(widget.ptId)
   //       .update({'call_id': cid, 'call_name': cname});
   // }
-
-
-  
-
 
   @override
   void initState() {
@@ -282,7 +294,9 @@ class _PTDetailState extends State<PTDetail> {
                                   onPressed: () {
                                     savePT();
                                     // saveUser();
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()));
                                     Fluttertoast.showToast(
                                       msg: 'Đăng ký thành công',
                                       toastLength: Toast.LENGTH_SHORT,
@@ -317,7 +331,9 @@ class _PTDetailState extends State<PTDetail> {
                                           borderRadius:
                                               BorderRadius.circular(10))),
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChoosePT()));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => ChoosePT()));
                                   },
                                   child: Text(
                                     'Hủy',
