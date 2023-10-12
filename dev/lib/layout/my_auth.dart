@@ -53,7 +53,7 @@ class MyAuth extends StatelessWidget {
             return HomePage();
           }else if(userType == 'admin'){
             return AdminHomePage();
-          }else if (isAnswered == true || trainer == 'trainer'){
+          }else if (trainer == 'trainer'){
             return TrainerHomePage();
           }else{
             return IntroPage();
