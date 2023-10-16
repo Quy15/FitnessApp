@@ -88,7 +88,7 @@ class _CancelRentState extends State<CancelRent> {
                         children: [
                           GetPT(ptID: ptIDs[index]),
                           SizedBox(
-                            width: 80,
+                            width: 50,
                           ),
                           IconButton(
                               onPressed: () {
