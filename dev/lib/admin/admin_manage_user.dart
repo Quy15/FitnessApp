@@ -44,7 +44,7 @@ class AdminManageUserState extends State<AdminManageUser> {
       isHTML: false,
     );
     try {
-      await FluttlSender.send(send_email);
+      await FlutterEmailSender.send(send_email);
 
       UserCredential credential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: mail, password: pass);
